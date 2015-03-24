@@ -4,6 +4,10 @@ RaceWidget::RaceWidget(QWidget *parent)
     : QWidget(parent)
 {
     setupUi();
+
+    raceScene = new RaceScene(100.0, 5, graphicsView);
+    graphicsView->setScene(raceScene);
+    connect(cameraSlider, SIGNAL(valueChanged(int)), raceScene, SLOT(cameraVerticalChange(int)));
 }
 
 RaceWidget::~RaceWidget()
@@ -12,6 +16,7 @@ RaceWidget::~RaceWidget()
     delete graphicsView;
     delete controlButton;
     delete cameraSlider;
+    delete raceScene;
 }
 
 void RaceWidget::resizeEvent(QResizeEvent *event)
@@ -37,6 +42,7 @@ void RaceWidget::setupUi()
     graphicsView->setMinimumSize(VIEW_W, VIEW_H);
     graphicsView->setMaximumSize(VIEW_W, VIEW_H);
     graphicsView->setGeometry(0, 0, VIEW_W, VIEW_H);
+    graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     gridLayout->addWidget(graphicsView);
 
     // set control button
@@ -75,6 +81,6 @@ void RaceWidget::adjustUiControls()
     cameraSlider->move(sliderTopLeft);
 }
 
-void RaceWidget::controlButtonHandler() {
-
+void RaceWidget::controlButtonHandler()
+{
 }

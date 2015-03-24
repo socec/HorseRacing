@@ -9,6 +9,8 @@
 #include <QPushButton>
 #include <QSlider>
 
+#include "racescene.h"
+
 // widget size is 16:9, qHD
 #define WIDGET_W (960)
 #define WIDGET_H (540)
@@ -39,6 +41,9 @@ private:
     QSlider *cameraSlider = nullptr;
     void setupUi();
     void adjustUiControls();
+
+    // race elements
+    RaceScene *raceScene = nullptr;
 
 private slots:
     void controlButtonHandler();

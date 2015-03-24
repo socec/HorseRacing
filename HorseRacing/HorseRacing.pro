@@ -16,6 +16,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        racewidget.cpp
+        racewidget.cpp \
+    racescene.cpp
 
-HEADERS  += racewidget.h
+HEADERS  += racewidget.h \
+    racescene.h
