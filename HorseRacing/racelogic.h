@@ -15,6 +15,8 @@ public:
     std::vector<float> getHorsePos() { return horsePos; }
     int getHorseCount() { return horsePos.size(); }
     float getCameraPos() { return cameraPos; }
+    std::vector<int> getStandings() { return standings; }
+    std::vector<int> getResults() { return results; }
 
     bool raceFinished() { return finished; }
     void nexTick();
@@ -23,8 +25,11 @@ private:
     float trackLength;
     std::vector<float> horsePos;
     float cameraPos;
+    std::vector<int> standings, results;
     bool finished;
     float baseSpeed = BASE_SPEED;
+
+    void updateStandings();
 };
 
 #endif // RACELOGIC_H
