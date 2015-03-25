@@ -57,8 +57,11 @@ RaceScene::~RaceScene()
 
 void RaceScene::worldUpdate(std::vector<float> horsePosX, float cameraPosX)
 {
-    // advance camera
-    cameraPos.setX(cameraParam.shiftX + cameraPosX);
+    // advance camera but stop it on the finish line
+    if (cameraPos.x() < (trackParam.startShift + trackParam.length))
+    {
+        cameraPos.setX(cameraParam.shiftX + cameraPosX);
+    }
 
     // advance horses
     for (int i = 0; i < horses.size(); i++) {
