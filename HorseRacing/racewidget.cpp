@@ -5,7 +5,7 @@ RaceWidget::RaceWidget(QWidget *parent)
 {
     setupUi();
 
-    raceScene = new RaceScene(100.0, 5, graphicsView);
+    raceScene = new RaceScene(500.0, 5, graphicsView);
     graphicsView->setScene(raceScene);
     connect(cameraSlider, SIGNAL(valueChanged(int)), raceScene, SLOT(cameraVerticalChange(int)));
 

@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 #include <QWidget>
 #include <QVector3D>
+#include <QGraphicsLineItem>
 
 #include "fenceitem.h"
 #include "spritesheet.h"
@@ -11,6 +12,7 @@
 
 #define CAMERA_SHIFT_Y (20.0) // initial camera Y axis shift in world units
 #define DEPTH_SCALE (0.2)     // scale factor for scene depth
+#define POSTS_PER_MARK (5)    // number of fence posts between track marks
 
 class RaceScene : public QGraphicsScene
 {
@@ -23,12 +25,16 @@ public:
 
 private:
     // scene parameters
-    void initializeParameters(int viewWidth, int viewHeight, float trackLength);
+    void initializeParameters(int viewWidth, int viewHeight, float trackLength, int horseCount);
     // track parameters
     struct {
         float length;
-        QSizeF fenceSize;
+        float startShift;
         float postSpacing;
+        int startPostIndex;
+        int postsPerMark = POSTS_PER_MARK;
+        QSizeF fenceSize;
+        QSizeF horseSize;
     } trackParam;
     // camera parameters
     struct {
@@ -44,8 +50,12 @@ private:
     // world items
     QVector3D cameraPos;
     FenceItem *backFence, *frontFence;
-    SpriteSheet *horseSprites;
+    SpriteSheet horseSprites;
     HorseItem *horse;
+
+    // track marks
+    QVector<QGraphicsLineItem*> trackMarks;
+    void updateTrackMarks();
 
 public slots:
     void cameraVerticalChange(int newY);
