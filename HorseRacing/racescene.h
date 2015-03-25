@@ -19,6 +19,8 @@ public:
     RaceScene(float trackLength, int horseCount, QWidget *parent = 0);
     ~RaceScene();
 
+    void worldUpdate(float horsePosX, float cameraPosX);
+
 private:
     // scene parameters
     void initializeParameters(int viewWidth, int viewHeight, float trackLength);

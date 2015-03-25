@@ -8,6 +8,7 @@
 #include <QGraphicsView>
 #include <QPushButton>
 #include <QSlider>
+#include <QTimer>
 
 #include "racescene.h"
 
@@ -22,6 +23,8 @@
 #define BUTTON_H (30)
 #define SLIDER_W (30)
 #define SLIDER_H (100)
+
+#define FPS (25)
 
 class RaceWidget : public QWidget
 {
@@ -45,8 +48,13 @@ private:
     // race elements
     RaceScene *raceScene = nullptr;
 
+    // scene timing
+    QTimer timer;
+    int fps = FPS;
+
 private slots:
     void controlButtonHandler();
+    void timerHandler();
 };
 
 #endif // RACEWIDGET_H

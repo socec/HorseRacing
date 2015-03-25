@@ -8,6 +8,9 @@ RaceWidget::RaceWidget(QWidget *parent)
     raceScene = new RaceScene(100.0, 5, graphicsView);
     graphicsView->setScene(raceScene);
     connect(cameraSlider, SIGNAL(valueChanged(int)), raceScene, SLOT(cameraVerticalChange(int)));
+
+    timer.setInterval(1000 / fps);
+    connect(&timer, SIGNAL(timeout()), this, SLOT(timerHandler()));
 }
 
 RaceWidget::~RaceWidget()
@@ -83,4 +86,13 @@ void RaceWidget::adjustUiControls()
 
 void RaceWidget::controlButtonHandler()
 {
+    // start timer to start the race
+    timer.start();
+}
+
+void RaceWidget::timerHandler()
+{
+    static int x = 0;
+    raceScene->worldUpdate(x, x);
+    x += 5;
 }

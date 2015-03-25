@@ -19,16 +19,16 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     cameraPos = QVector3D(cameraParam.shiftX, cameraParam.shiftY, 0.0);
 
 
-    backFence = new FenceItem(QVector3D(10, 0, 1), QSizeF(200, 50), depthScaling(1), 50);
+    backFence = new FenceItem(QVector3D(0, 0, 1), QSizeF(200, 50), depthScaling(1), 50);
     backFence->updateScenePos(worldToScene(backFence->getWorldPos()));
     addItem(backFence);
 
-    frontFence = new FenceItem(QVector3D(10, 0, 5), QSizeF(200, 50), depthScaling(5), 50);
+    frontFence = new FenceItem(QVector3D(0, 0, 5), QSizeF(200, 50), depthScaling(5), 50);
     frontFence->updateScenePos(worldToScene(frontFence->getWorldPos()));
     addItem(frontFence);
 
     horseSprites = new SpriteSheet();
-    horse = new HorseItem(QVector3D(10, 0, 3), QSizeF(horseSprites->spriteWidth(), horseSprites->spriteHeight()), depthScaling(3), horseSprites);
+    horse = new HorseItem(QVector3D(0, 0, 3), QSizeF(horseSprites->spriteWidth(), horseSprites->spriteHeight()), depthScaling(3), horseSprites);
     horse->updateScenePos(worldToScene(horse->getWorldPos()));
     addItem(horse);
 
@@ -43,6 +43,19 @@ RaceScene::~RaceScene()
     delete frontFence;
     delete horseSprites;
     delete horse;
+}
+
+void RaceScene::worldUpdate(float horsePosX, float cameraPosX)
+{
+    // advance camera
+    cameraPos.setX(cameraParam.shiftX + cameraPosX);
+
+    // advance horse
+    QVector3D horsePos = horse->getWorldPos();
+    horsePos.setX(horsePosX);
+    horse->updateWorldPos(horsePos);
+
+    refreshScene();
 }
 
 void RaceScene::initializeParameters(int viewWidth, int viewHeight, float trackLength)
