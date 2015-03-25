@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QVector3D>
 #include <QGraphicsLineItem>
+#include <QGraphicsTextItem>
 
 #include "fenceitem.h"
 #include "spritesheet.h"
@@ -22,6 +23,7 @@ public:
     ~RaceScene();
 
     void worldUpdate(std::vector<float> horsePosX, float cameraPosX);
+    void showResults(std::vector<int> results);
 
 private:
     // scene parameters
@@ -56,6 +58,9 @@ private:
     // track marks
     QVector<QGraphicsLineItem*> trackMarks;
     void updateTrackMarks();
+
+    // race results
+    QGraphicsTextItem resultDisplay;
 
 public slots:
     void cameraVerticalChange(int newY);

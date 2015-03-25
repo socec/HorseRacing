@@ -27,7 +27,7 @@
 
 #define FPS (25)
 
-#define TRACK_LENGTH (500.0)
+#define TRACK_LENGTH (1000.0)
 #define HORSE_COUNT (5)
 
 class RaceWidget : public QWidget

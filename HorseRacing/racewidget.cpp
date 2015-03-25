@@ -97,4 +97,9 @@ void RaceWidget::timerHandler()
 {
     raceLogic->nexTick();
     raceScene->worldUpdate(raceLogic->getHorsePos(), raceLogic->getCameraPos());
+
+    // show race results if needed
+    if (!raceLogic->getResults().empty()) {
+        raceScene->showResults(raceLogic->getResults());
+    }
 }

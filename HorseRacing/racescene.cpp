@@ -42,6 +42,12 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     frontFence = new FenceItem(itemPos, trackParam.fenceSize, depthScaling(itemPos.z()), trackParam.postSpacing);
     addItem(frontFence);
 
+    // add result display
+    QFont displayFont("Arial", 12, QFont::Bold);
+    resultDisplay.setFont(displayFont);
+    resultDisplay.setPos(10.0, 0.0);
+    addItem(&resultDisplay);
+
     // refresh scene
     refreshScene();
 }
@@ -71,6 +77,22 @@ void RaceScene::worldUpdate(std::vector<float> horsePosX, float cameraPosX)
     }
 
     refreshScene();
+}
+
+void RaceScene::showResults(std::vector<int> results)
+{
+    // do not show results if they are empty
+    if (results.empty()) return;
+
+    // construct display text from results vector
+    QString displayText("Results:\n");
+    for (int i = 0; i < results.size(); i++) {
+        displayText.append("    " + QString::number(i + 1) + ". ");
+        displayText.append("track " + QString::number(results.at(i)) + "\n");
+    }
+    // show results on display
+    resultDisplay.setPlainText(displayText);
+    resultDisplay.adjustSize();
 }
 
 void RaceScene::initializeParameters(int viewWidth, int viewHeight, float trackLength, int horseCount)
