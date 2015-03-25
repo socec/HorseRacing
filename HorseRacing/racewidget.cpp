@@ -92,7 +92,11 @@ void RaceWidget::controlButtonHandler()
 
 void RaceWidget::timerHandler()
 {
-    static int x = 0;
-    raceScene->worldUpdate(x, x);
-    x += 5;
+    static int cx = 0;
+    static std::vector<float> hx = {0, 0, 0, 0, 0};
+    raceScene->worldUpdate(hx, cx);
+    cx += 5;
+    for (int i = 0; i < 5; i++) {
+        hx.at(i) += 5;
+    }
 }

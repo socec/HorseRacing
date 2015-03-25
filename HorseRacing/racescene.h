@@ -21,7 +21,7 @@ public:
     RaceScene(float trackLength, int horseCount, QWidget *parent = 0);
     ~RaceScene();
 
-    void worldUpdate(float horsePosX, float cameraPosX);
+    void worldUpdate(std::vector<float> horsePosX, float cameraPosX);
 
 private:
     // scene parameters
@@ -51,7 +51,7 @@ private:
     QVector3D cameraPos;
     FenceItem *backFence, *frontFence;
     SpriteSheet horseSprites;
-    HorseItem *horse;
+    QVector<HorseItem*> horses;
 
     // track marks
     QVector<QGraphicsLineItem*> trackMarks;

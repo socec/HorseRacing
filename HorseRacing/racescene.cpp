@@ -20,19 +20,27 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     // set camera
     cameraPos = QVector3D(cameraParam.shiftX, cameraParam.shiftY, 0.0);
 
+    // start adding items
+    QVector3D itemPos(0.0, 0.0, 0.0);
 
-    backFence = new FenceItem(QVector3D(0, 0, 1), trackParam.fenceSize, depthScaling(1), trackParam.postSpacing);
-    backFence->updateScenePos(worldToScene(backFence->getWorldPos()));
+    // add back fence
+    backFence = new FenceItem(itemPos, trackParam.fenceSize, depthScaling(itemPos.z()), trackParam.postSpacing);
     addItem(backFence);
 
-    frontFence = new FenceItem(QVector3D(0, 0, 5), trackParam.fenceSize, depthScaling(5), trackParam.postSpacing);
-    frontFence->updateScenePos(worldToScene(frontFence->getWorldPos()));
+    // add horses
+    itemPos.setX(trackParam.startShift); // on starting line
+    for (int i = 0; i < horseCount; i++) {
+        itemPos += QVector3D(0.0, 0.0, 1.0);
+        HorseItem *horse = new HorseItem(itemPos, trackParam.horseSize, depthScaling(itemPos.z()), &horseSprites);
+        horses.append(horse);
+        addItem(horse);
+    }
+
+    // add front fence
+    itemPos.setX(0.0);
+    itemPos += QVector3D(0.0, 0.0, 1.0);
+    frontFence = new FenceItem(itemPos, trackParam.fenceSize, depthScaling(itemPos.z()), trackParam.postSpacing);
     addItem(frontFence);
-
-    horse = new HorseItem(QVector3D(trackParam.startShift, 0, 3), trackParam.horseSize, depthScaling(3), &horseSprites);
-    horse->updateScenePos(worldToScene(horse->getWorldPos()));
-    addItem(horse);
-
 
     // refresh scene
     refreshScene();
@@ -42,18 +50,22 @@ RaceScene::~RaceScene()
 {
     delete backFence;
     delete frontFence;
-    delete horse;
+    for (int i = 0; i < horses.size(); i++) {
+        delete horses.at(i);
+    }
 }
 
-void RaceScene::worldUpdate(float horsePosX, float cameraPosX)
+void RaceScene::worldUpdate(std::vector<float> horsePosX, float cameraPosX)
 {
     // advance camera
     cameraPos.setX(cameraParam.shiftX + cameraPosX);
 
-    // advance horse
-    QVector3D horsePos = horse->getWorldPos();
-    horsePos.setX(trackParam.startShift + horsePosX);
-    horse->updateWorldPos(horsePos);
+    // advance horses
+    for (int i = 0; i < horses.size(); i++) {
+        QVector3D horsePos = horses.at(i)->getWorldPos();
+        horsePos.setX(trackParam.startShift + horsePosX.at(i));
+        horses.at(i)->updateWorldPos(horsePos);
+    }
 
     refreshScene();
 }
@@ -100,10 +112,13 @@ QPointF RaceScene::worldToScene(QVector3D worldPos)
 
 void RaceScene::refreshScene()
 {
+    // update world items
     backFence->updateScenePos(worldToScene(backFence->getWorldPos()));
     frontFence->updateScenePos(worldToScene(frontFence->getWorldPos()));
-    horse->updateScenePos(worldToScene(horse->getWorldPos()));
-
+    for (int i = 0; i < horses.size(); i++) {
+        horses.at(i)->updateScenePos(worldToScene(horses.at(i)->getWorldPos()));
+    }
+    // update track marks
     updateTrackMarks();
 
     // redraw scene rectangle
