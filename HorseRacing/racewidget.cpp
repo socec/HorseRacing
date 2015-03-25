@@ -5,11 +5,8 @@ RaceWidget::RaceWidget(QWidget *parent)
 {
     setupUi();
 
-    raceLogic = new RaceLogic(TRACK_LENGTH, HORSE_COUNT);
-
-    raceScene = new RaceScene(raceLogic->getTrackLength(), raceLogic->getHorseCount(), graphicsView);
-    graphicsView->setScene(raceScene);
-    connect(cameraSlider, SIGNAL(valueChanged(int)), raceScene, SLOT(cameraVerticalChange(int)));
+    setRaceLogic();
+    setRaceScene();
 
     timer.setInterval(1000 / fps);
     connect(&timer, SIGNAL(timeout()), this, SLOT(timerHandler()));
@@ -87,10 +84,46 @@ void RaceWidget::adjustUiControls()
     cameraSlider->move(sliderTopLeft);
 }
 
+void RaceWidget::setRaceLogic()
+{
+    if (raceLogic) delete raceLogic;
+    raceLogic = new RaceLogic(TRACK_LENGTH, HORSE_COUNT);
+}
+
+void RaceWidget::setRaceScene()
+{
+    // don't set race scene without race logic
+    if (!raceLogic) setRaceLogic();
+
+    if (raceScene) delete raceScene;
+    raceScene = new RaceScene(raceLogic->getTrackLength(), raceLogic->getHorseCount(), graphicsView);
+
+    // set scene to view
+    graphicsView->setScene(raceScene);
+    // connect camera slider to scene
+    connect(cameraSlider, SIGNAL(valueChanged(int)), raceScene, SLOT(cameraVerticalChange(int)));
+    cameraSlider->setValue(CAMERA_SHIFT_Y);
+}
+
 void RaceWidget::controlButtonHandler()
 {
-    // start timer to start the race
-    timer.start();
+    // if race is finished control button allows restart
+    if (raceLogic->raceFinished()) {
+        // stop timer to stop the race
+        timer.stop();
+        // repeat race setup
+        setRaceLogic();
+        setRaceScene();
+        // control button now allows start
+        controlButton->setText("start");
+    }
+    // otherwise control button allows start
+    else {
+        // start timer to start the race
+        timer.start();
+        // disable control button during the race
+        controlButton->setEnabled(false);
+    }
 }
 
 void RaceWidget::timerHandler()
@@ -101,5 +134,13 @@ void RaceWidget::timerHandler()
     // show race results if needed
     if (!raceLogic->getResults().empty()) {
         raceScene->showResults(raceLogic->getResults());
+    }
+
+    // if race is finished control button allows restart
+    if (raceLogic->raceFinished()) {
+        // enable control button after the race
+        controlButton->setEnabled(true);
+        // control button now allows restart
+        controlButton->setText("restart");
     }
 }

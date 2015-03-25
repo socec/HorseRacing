@@ -57,6 +57,9 @@ private:
     QTimer timer;
     int fps = FPS;
 
+    void setRaceLogic();
+    void setRaceScene();
+
 private slots:
     void controlButtonHandler();
     void timerHandler();
