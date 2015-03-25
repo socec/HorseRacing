@@ -1,7 +1,5 @@
 #include "racescene.h"
 
-#include <QGraphicsRectItem>
-
 RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     : QGraphicsScene(parent)
 {
@@ -18,9 +16,13 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     cameraPos = QVector3D(cameraParam.shiftX, cameraParam.shiftY, 0.0);
 
 
-    QGraphicsRectItem *ri = new QGraphicsRectItem(50,50,100,100);
-    ri->setPos(worldToScene(QVector3D(10, 10, 10)));
-    addItem(ri);
+    backFence = new FenceItem(QVector3D(10, 0, 1), QSizeF(200, 50), depthScaling(1), 50);
+    backFence->updateScenePos(worldToScene(backFence->getWorldPos()));
+    addItem(backFence);
+
+    frontFence = new FenceItem(QVector3D(10, 0, 7), QSizeF(200, 50), depthScaling(4), 50);
+    frontFence->updateScenePos(worldToScene(frontFence->getWorldPos()));
+    addItem(frontFence);
 
 
     // refresh scene
@@ -29,6 +31,8 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
 
 RaceScene::~RaceScene()
 {
+    delete backFence;
+    delete frontFence;
 }
 
 QPointF RaceScene::worldToScene(QVector3D worldPos)
@@ -48,9 +52,8 @@ QPointF RaceScene::worldToScene(QVector3D worldPos)
 
 void RaceScene::refreshScene()
 {
-    QGraphicsRectItem *ri = new QGraphicsRectItem(50,50,100,100);
-    ri->setPos(worldToScene(QVector3D(10, 10, 10)));
-    addItem(ri);
+    backFence->updateScenePos(worldToScene(backFence->getWorldPos()));
+    frontFence->updateScenePos(worldToScene(frontFence->getWorldPos()));
 
     // redraw scene rectangle
     update(sceneRect());

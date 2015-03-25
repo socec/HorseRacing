@@ -5,8 +5,10 @@
 #include <QWidget>
 #include <QVector3D>
 
+#include "fenceitem.h"
+
 #define CAMERA_SHIFT_Y (20.0) // initial camera Y axis shift in world units
-#define Z_SCALE (0.2)         // scale factor for scene depth
+#define DEPTH_SCALE (0.2)     // scale factor for scene depth
 
 class RaceScene : public QGraphicsScene
 {
@@ -23,12 +25,13 @@ private:
     } cameraParam;
 
     // scene 2.5D visualisation
-    float depthScaling(float z) { return 1.0 + (z * Z_SCALE); }
+    float depthScaling(float z) { return 1.0 + (z * DEPTH_SCALE); }
     QPointF worldToScene(QVector3D worldPos);
     void refreshScene();
 
     // world items
     QVector3D cameraPos;
+    FenceItem *backFence, *frontFence;
 
 public slots:
     void cameraVerticalChange(int newY);
