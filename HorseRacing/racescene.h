@@ -6,6 +6,8 @@
 #include <QVector3D>
 
 #include "fenceitem.h"
+#include "spritesheet.h"
+#include "horseitem.h"
 
 #define CAMERA_SHIFT_Y (20.0) // initial camera Y axis shift in world units
 #define DEPTH_SCALE (0.2)     // scale factor for scene depth
@@ -40,6 +42,8 @@ private:
     // world items
     QVector3D cameraPos;
     FenceItem *backFence, *frontFence;
+    SpriteSheet *horseSprites;
+    HorseItem *horse;
 
 public slots:
     void cameraVerticalChange(int newY);

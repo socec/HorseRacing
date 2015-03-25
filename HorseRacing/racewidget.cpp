@@ -59,8 +59,8 @@ void RaceWidget::setupUi()
     cameraSlider->setMaximumSize(SLIDER_W, SLIDER_H);
     cameraSlider->setGeometry(0, 0, SLIDER_W, SLIDER_H);
     cameraSlider->setMinimum(2);
-    cameraSlider->setMaximum(20);
-    cameraSlider->setValue(20);
+    cameraSlider->setMaximum(CAMERA_SHIFT_Y);
+    cameraSlider->setValue(CAMERA_SHIFT_Y);
     gridLayout->addWidget(cameraSlider);
 
     // correctly adjust UI controls

@@ -23,9 +23,14 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     backFence->updateScenePos(worldToScene(backFence->getWorldPos()));
     addItem(backFence);
 
-    frontFence = new FenceItem(QVector3D(10, 0, 7), QSizeF(200, 50), depthScaling(4), 50);
+    frontFence = new FenceItem(QVector3D(10, 0, 5), QSizeF(200, 50), depthScaling(5), 50);
     frontFence->updateScenePos(worldToScene(frontFence->getWorldPos()));
     addItem(frontFence);
+
+    horseSprites = new SpriteSheet();
+    horse = new HorseItem(QVector3D(10, 0, 3), QSizeF(horseSprites->spriteWidth(), horseSprites->spriteHeight()), depthScaling(3), horseSprites);
+    horse->updateScenePos(worldToScene(horse->getWorldPos()));
+    addItem(horse);
 
 
     // refresh scene
@@ -36,6 +41,8 @@ RaceScene::~RaceScene()
 {
     delete backFence;
     delete frontFence;
+    delete horseSprites;
+    delete horse;
 }
 
 void RaceScene::initializeParameters(int viewWidth, int viewHeight, float trackLength)
@@ -69,6 +76,7 @@ void RaceScene::refreshScene()
 {
     backFence->updateScenePos(worldToScene(backFence->getWorldPos()));
     frontFence->updateScenePos(worldToScene(frontFence->getWorldPos()));
+    horse->updateScenePos(worldToScene(horse->getWorldPos()));
 
     // redraw scene rectangle
     update(sceneRect());

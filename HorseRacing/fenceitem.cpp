@@ -31,11 +31,11 @@ QRectF FenceItem::boundingRect() const
 void FenceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     pen.setColor(Qt::white);
-
+    // draw posts
     pen.setWidthF(2.5);
     painter->setPen(pen);
     painter->drawLines(postLines);
-
+    // draw bar
     pen.setWidthF(5.0);
     painter->setPen(pen);
     painter->drawLine(barLine);
@@ -51,6 +51,6 @@ void FenceItem::updateScenePos(QPointF newScenePos)
 
 void FenceItem::updateWorldPos(QVector3D newWorldPos)
 {
-    // fence does not move in world coordinates
+    // fence does not change world position
     return;
 }

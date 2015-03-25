@@ -19,9 +19,16 @@ SOURCES += main.cpp\
         racewidget.cpp \
     racescene.cpp \
     fenceitem.cpp \
-    raceitem.cpp
+    raceitem.cpp \
+    spritesheet.cpp \
+    horseitem.cpp
 
 HEADERS  += racewidget.h \
     racescene.h \
     fenceitem.h \
-    raceitem.h
+    raceitem.h \
+    spritesheet.h \
+    horseitem.h
+
+RESOURCES += \
+    images.qrc
