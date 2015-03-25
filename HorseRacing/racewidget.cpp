@@ -5,7 +5,9 @@ RaceWidget::RaceWidget(QWidget *parent)
 {
     setupUi();
 
-    raceScene = new RaceScene(500.0, 5, graphicsView);
+    raceLogic = new RaceLogic(TRACK_LENGTH, HORSE_COUNT);
+
+    raceScene = new RaceScene(raceLogic->getTrackLength(), raceLogic->getHorseCount(), graphicsView);
     graphicsView->setScene(raceScene);
     connect(cameraSlider, SIGNAL(valueChanged(int)), raceScene, SLOT(cameraVerticalChange(int)));
 
@@ -19,6 +21,7 @@ RaceWidget::~RaceWidget()
     delete graphicsView;
     delete controlButton;
     delete cameraSlider;
+    delete raceLogic;
     delete raceScene;
 }
 
@@ -92,11 +95,6 @@ void RaceWidget::controlButtonHandler()
 
 void RaceWidget::timerHandler()
 {
-    static int cx = 0;
-    static std::vector<float> hx = {0, 0, 0, 0, 0};
-    raceScene->worldUpdate(hx, cx);
-    cx += 5;
-    for (int i = 0; i < 5; i++) {
-        hx.at(i) += 5;
-    }
+    raceLogic->nexTick();
+    raceScene->worldUpdate(raceLogic->getHorsePos(), raceLogic->getCameraPos());
 }
