@@ -31,6 +31,7 @@ private:
     // track parameters
     struct {
         float length;
+        float adjustPos;
         float startShift;
         float postSpacing;
         int startPostIndex;

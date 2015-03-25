@@ -66,13 +66,13 @@ void RaceScene::worldUpdate(std::vector<float> horsePosX, float cameraPosX)
     // advance camera but stop it on the finish line
     if (cameraPos.x() < (trackParam.startShift + trackParam.length))
     {
-        cameraPos.setX(cameraParam.shiftX + cameraPosX);
+        cameraPos.setX(cameraParam.shiftX + cameraPosX * trackParam.adjustPos);
     }
 
     // advance horses
     for (int i = 0; i < horses.size(); i++) {
         QVector3D horsePos = horses.at(i)->getWorldPos();
-        horsePos.setX(trackParam.startShift + horsePosX.at(i));
+        horsePos.setX(trackParam.startShift + horsePosX.at(i) * trackParam.adjustPos);
         horses.at(i)->updateWorldPos(horsePos);
     }
 
@@ -108,6 +108,7 @@ void RaceScene::initializeParameters(int viewWidth, int viewHeight, float trackL
     // adjust requested track length to keep proper track marks
     int trackUnit = trackParam.postSpacing * trackParam.postsPerMark;
     trackParam.length = multiple_up(trackLength, trackUnit);
+    trackParam.adjustPos = trackParam.length / trackLength;
 
     // put the starting line in the middle of the view, keep a post on the start line
     trackParam.startShift = multiple_up(viewWidth / 2, trackParam.postSpacing);
