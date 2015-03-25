@@ -7,6 +7,9 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     int viewWidth = parent->width() - 2;
     int viewHeight = parent->height() - 2;
 
+    // initalize scene parameters
+    initializeParameters(viewWidth, viewHeight, trackLength);
+
     // set scene rectangle
     setSceneRect(0, 0, viewWidth, viewHeight);
     // set scene background
@@ -33,6 +36,18 @@ RaceScene::~RaceScene()
 {
     delete backFence;
     delete frontFence;
+}
+
+void RaceScene::initializeParameters(int viewWidth, int viewHeight, float trackLength)
+{
+    trackParam.postSpacing = viewWidth/10;
+
+    int trackUnit = trackParam.postSpacing;
+    trackParam.length = 5 * trackUnit;
+
+    cameraParam.shiftX = (viewWidth / 8);
+
+    trackParam.fenceSize = QSizeF(trackParam.length, viewHeight/20);
 }
 
 QPointF RaceScene::worldToScene(QVector3D worldPos)

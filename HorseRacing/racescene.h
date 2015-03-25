@@ -19,7 +19,15 @@ public:
 
 private:
     // scene parameters
-    struct cameraParam {
+    void initializeParameters(int viewWidth, int viewHeight, float trackLength);
+    // track parameters
+    struct {
+        float length;
+        QSizeF fenceSize;
+        float postSpacing;
+    } trackParam;
+    // camera parameters
+    struct {
         float shiftX = 0.0;
         float shiftY = CAMERA_SHIFT_Y;
     } cameraParam;

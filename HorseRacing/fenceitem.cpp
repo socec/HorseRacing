@@ -25,7 +25,7 @@ FenceItem::FenceItem(QVector3D worldPos, QSizeF worldSize, float scale, float po
 
 QRectF FenceItem::boundingRect() const
 {
-    return QRectF(0, 0, getWorldSize().width(), getWorldSize().height());
+    return QRectF(0, 0, worldSize.width(), worldSize.height());
 }
 
 void FenceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
