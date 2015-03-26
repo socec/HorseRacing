@@ -33,7 +33,7 @@ void HorseItem::updateScenePos(QPointF newScenePos)
 {
     // place bottom right point at requested scene postion (match position with horse head)
     QPointF offset(boundingRect().width(), boundingRect().height());
-    // setting position in parent coordinates, need to use item scale
+    // setting position in parent coordinates, need to use item scale on offset
     setPos(newScenePos - offset * scale());
 }
 

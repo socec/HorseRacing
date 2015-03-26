@@ -51,6 +51,6 @@ void FenceItem::updateScenePos(QPointF newScenePos)
 
 void FenceItem::updateWorldPos(QVector3D newWorldPos)
 {
-    // fence does not change world position
+    // does not change world position
     return;
 }

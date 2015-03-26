@@ -27,13 +27,18 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     backFence = new FenceItem(itemPos, trackParam.fenceSize, depthScaling(itemPos.z()), trackParam.postSpacing);
     addItem(backFence);
 
-    // add horses
+    // add horses and starting gates
     itemPos.setX(trackParam.startShift); // on starting line
     for (int i = 0; i < horseCount; i++) {
         itemPos += QVector3D(0.0, 0.0, 1.0);
         HorseItem *horse = new HorseItem(itemPos, trackParam.horseSize, depthScaling(itemPos.z()), &horseSprites);
         horses.append(horse);
         addItem(horse);
+        // starting gate is shifted back to make horse head visible
+        QVector3D gatePos = itemPos - QVector3D(trackParam.horseSize.width() * 0.3, 0.0, 0.0);
+        GateItem *gate = new GateItem(gatePos, trackParam.horseSize, depthScaling(itemPos.z()));
+        gates.append(gate);
+        addItem(gate);
     }
 
     // add front fence
@@ -158,6 +163,7 @@ void RaceScene::refreshScene()
     frontFence->updateScenePos(worldToScene(frontFence->getWorldPos()));
     for (int i = 0; i < horses.size(); i++) {
         horses.at(i)->updateScenePos(worldToScene(horses.at(i)->getWorldPos()));
+        gates.at(i)->updateScenePos(worldToScene(gates.at(i)->getWorldPos()));
     }
     // update track marks
     updateTrackMarks();

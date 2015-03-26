@@ -10,6 +10,7 @@
 #include "fenceitem.h"
 #include "spritesheet.h"
 #include "horseitem.h"
+#include "gateitem.h"
 
 #define CAMERA_SHIFT_Y (20.0) // initial camera Y axis shift in world units
 #define DEPTH_SCALE (0.2)     // scale factor for scene depth
@@ -56,6 +57,7 @@ private:
     FenceItem *backFence, *frontFence;
     SpriteSheet horseSprites;
     QVector<HorseItem*> horses;
+    QVector<GateItem*> gates;
 
     // track marks
     QVector<QGraphicsLineItem*> trackMarks;

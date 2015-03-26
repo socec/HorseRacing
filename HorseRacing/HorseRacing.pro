@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     raceitem.cpp \
     spritesheet.cpp \
     horseitem.cpp \
-    racelogic.cpp
+    racelogic.cpp \
+    gateitem.cpp
 
 HEADERS  += racewidget.h \
     racescene.h \
@@ -30,7 +31,8 @@ HEADERS  += racewidget.h \
     raceitem.h \
     spritesheet.h \
     horseitem.h \
-    racelogic.h
+    racelogic.h \
+    gateitem.h
 
 RESOURCES += \
     images.qrc
