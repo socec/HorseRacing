@@ -30,7 +30,7 @@ QRectF FenceItem::boundingRect() const
 
 void FenceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    pen.setColor(Qt::white);
+    QPen pen(Qt::white);
     // draw posts
     pen.setWidthF(2.5);
     painter->setPen(pen);

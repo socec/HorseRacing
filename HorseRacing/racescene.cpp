@@ -34,9 +34,7 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
         HorseItem *horse = new HorseItem(itemPos, trackParam.horseSize, depthScaling(itemPos.z()), &horseSprites);
         horses.append(horse);
         addItem(horse);
-        // starting gate is shifted back to make horse head visible
-        QVector3D gatePos = itemPos - QVector3D(trackParam.horseSize.width() * 0.3, 0.0, 0.0);
-        GateItem *gate = new GateItem(gatePos, trackParam.horseSize, depthScaling(itemPos.z()));
+        GateItem *gate = new GateItem(itemPos, trackParam.horseSize, depthScaling(itemPos.z()));
         gates.append(gate);
         addItem(gate);
     }

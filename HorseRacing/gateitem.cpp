@@ -16,10 +16,21 @@ QRectF GateItem::boundingRect() const
 
 void GateItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    // draw rectangle with dense pattern
-    QBrush brush(Qt::white, Qt::Dense1Pattern);
-    painter->setBrush(brush);
-    painter->drawRect(boundingRect());
+    // separating top and bottom
+    float topHeight = boundingRect().height() / 2;
+    float bottomHeight = boundingRect().height() - topHeight;
+    QRectF topRect(0, 0, boundingRect().width(), topHeight);
+    QRectF botRect(0, topHeight, boundingRect().width(), bottomHeight);
+    // border pen
+    QPen pen(Qt::black);
+    pen.setWidthF(1.0);
+    painter->setPen(pen);
+    // draw top rectangle with less dense pattern
+    painter->setBrush(QBrush(Qt::white, Qt::Dense4Pattern));
+    painter->drawRect(topRect);
+    // draw bottom rectangle with more dense pattern
+    painter->setBrush(QBrush(Qt::white, Qt::Dense1Pattern));
+    painter->drawRect(botRect);
 
     update(boundingRect());
 }

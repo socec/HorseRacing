@@ -24,7 +24,6 @@ public:
 private:
     QVector<QLineF> postLines;
     QLineF barLine;
-    QPen pen;
 };
 
 #endif // FENCEITEM_H
