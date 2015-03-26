@@ -10,7 +10,7 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     int viewHeight = parent->height() - 2;
 
     // initalize scene parameters
-    initializeParameters(viewWidth, viewHeight, trackLength, horseCount);
+    initParameters(viewWidth, viewHeight, trackLength, horseCount);
 
     // set scene rectangle
     setSceneRect(0, 0, viewWidth, viewHeight);
@@ -18,20 +18,22 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     setBackgroundBrush(Qt::gray);
 
     // set camera
-    cameraPos = QVector3D(cameraParam.shiftX, cameraParam.shiftY, 0.0);
+    cameraPos = QVector3D(cameraParam.shiftX, cameraParam.shiftY, 0);
 
     // start adding items
-    QVector3D itemPos(0.0, 0.0, 0.0);
+    QVector3D itemPos(0, 0, 0);
 
     // add back fence
-    backFence = new FenceItem(itemPos, trackParam.fenceSize, depthScaling(itemPos.z()), trackParam.postSpacing);
+    backFence = new FenceItem(itemPos, trackParam.fenceSize, depthScaling(itemPos.z()),
+                              trackParam.postSpacing);
     addItem(backFence);
 
     // add horses and starting gates
     itemPos.setX(trackParam.startShift); // on starting line
     for (int i = 0; i < horseCount; i++) {
-        itemPos += QVector3D(0.0, 0.0, 1.0);
-        HorseItem *horse = new HorseItem(itemPos, trackParam.horseSize, depthScaling(itemPos.z()), &horseSprites);
+        itemPos += QVector3D(0, 0, 1);
+        HorseItem *horse = new HorseItem(itemPos, trackParam.horseSize, depthScaling(itemPos.z()),
+                                         &horseSprites);
         horses.append(horse);
         addItem(horse);
         GateItem *gate = new GateItem(itemPos, trackParam.horseSize, depthScaling(itemPos.z()));
@@ -40,15 +42,16 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     }
 
     // add front fence
-    itemPos.setX(0.0);
-    itemPos += QVector3D(0.0, 0.0, 1.0);
-    frontFence = new FenceItem(itemPos, trackParam.fenceSize, depthScaling(itemPos.z()), trackParam.postSpacing);
+    itemPos.setX(0);
+    itemPos += QVector3D(0, 0, 1);
+    frontFence = new FenceItem(itemPos, trackParam.fenceSize, depthScaling(itemPos.z()),
+                               trackParam.postSpacing);
     addItem(frontFence);
 
     // add result display
     QFont displayFont("Arial", 12, QFont::Bold);
     resultDisplay.setFont(displayFont);
-    resultDisplay.setPos(10.0, 0.0);
+    resultDisplay.setPos(10, 0);
     addItem(&resultDisplay);
 
     // display items on scene
@@ -61,6 +64,10 @@ RaceScene::~RaceScene()
     delete frontFence;
     for (int i = 0; i < horses.size(); i++) {
         delete horses.at(i);
+        delete gates.at(i);
+    }
+    for (int i = 0; i < trackMarks.size(); i++) {
+        delete trackMarks.at(i);
     }
 }
 
@@ -101,7 +108,7 @@ void RaceScene::showResults(std::vector<int> results)
 void RaceScene::restartRace()
 {
     // reset camera
-    cameraPos = QVector3D(cameraParam.shiftX, cameraParam.shiftY, 0.0);
+    cameraPos = QVector3D(cameraParam.shiftX, cameraParam.shiftY, 0);
     // reset horses
     for (int i = 0; i < horses.size(); i++) {
         horses.at(i)->backToStartingLine(trackParam.startShift);
@@ -113,7 +120,7 @@ void RaceScene::restartRace()
     refreshScene();
 }
 
-void RaceScene::initializeParameters(int viewWidth, int viewHeight, float trackLength, int horseCount)
+void RaceScene::initParameters(int viewWidth, int viewHeight, float trackLength, int horseCount)
 {
     // adjust horse size to view size but keep horse sprite aspect ratio
     float horseHeight = viewHeight / (horseCount + 2);
@@ -178,7 +185,7 @@ void RaceScene::updateTrackMarks()
         // pin track marks to posts
         for (int i = trackParam.startPostIndex; i <= finishPostInd; i += trackParam.postsPerMark) {
             // mark is multiple of post spacing
-            QVector3D markOffset(i * trackParam.postSpacing, 0.0, 0.0);
+            QVector3D markOffset(i * trackParam.postSpacing, 0, 0);
             // project mark to scene
             QPointF backFenceMark(worldToScene(backFence->getWorldPos() + markOffset));
             QPointF frontFenceMark(worldToScene(frontFence->getWorldPos() + markOffset));
@@ -196,7 +203,7 @@ void RaceScene::updateTrackMarks()
         for (int i = 0; i < trackMarks.size(); i++) {
             // find mark pinned to post
             float postOffset = (trackParam.startPostIndex + i * trackParam.postsPerMark);
-            QVector3D markOffset(postOffset * trackParam.postSpacing, 0.0, 0.0);
+            QVector3D markOffset(postOffset * trackParam.postSpacing, 0, 0);
             // project mark to scene
             QPointF backFenceMark(worldToScene(backFence->getWorldPos() + markOffset));
             QPointF frontFenceMark(worldToScene(frontFence->getWorldPos() + markOffset));

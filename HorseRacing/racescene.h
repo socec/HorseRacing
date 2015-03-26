@@ -29,7 +29,7 @@ public:
 
 private:
     // scene parameters
-    void initializeParameters(int viewWidth, int viewHeight, float trackLength, int horseCount);
+    void initParameters(int viewWidth, int viewHeight, float trackLength, int horseCount);
     // track parameters
     struct {
         float length;

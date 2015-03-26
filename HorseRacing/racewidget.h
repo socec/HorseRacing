@@ -43,15 +43,15 @@ public:
 private:
     // UI elements
     QGridLayout *gridLayout = nullptr;
-    QGraphicsView *graphicsView = nullptr;
+    QGraphicsView *view = nullptr;
     QPushButton *controlButton = nullptr;
     QSlider *cameraSlider = nullptr;
     void setupUi();
     void adjustUiControls();
 
     // race elements
-    RaceLogic *raceLogic = nullptr;
-    RaceScene *raceScene = nullptr;
+    RaceLogic *logic = nullptr;
+    RaceScene *scene = nullptr;
 
     // scene timing
     QTimer timer;
