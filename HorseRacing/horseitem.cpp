@@ -54,3 +54,10 @@ void HorseItem::updateWorldPos(QVector3D newWorldPos)
         worldPos.setX(newWorldPos.x());
     }
 }
+
+void HorseItem::backToStartingLine(float startingLineX)
+{
+    spriteIndex = 0;
+    onStartingLine = true;
+    worldPos.setX(startingLineX);
+}

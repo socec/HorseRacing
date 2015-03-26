@@ -18,6 +18,8 @@ public:
     void updateScenePos(QPointF newScenePos);
     void updateWorldPos(QVector3D newWorldPos);
 
+    void backToStartingLine(float startingLineX);
+
 private:
     SpriteSheet *spriteSheet; // points to external object, don't delete in destructor
     int spriteIndex;

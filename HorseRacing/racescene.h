@@ -24,6 +24,7 @@ public:
 
     void worldUpdate(std::vector<float> horsePosX, float cameraPosX);
     void showResults(std::vector<int> results);
+    void restartRace();
 
 private:
     // scene parameters

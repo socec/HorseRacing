@@ -20,6 +20,7 @@ public:
 
     bool raceFinished() { return finished; }
     void nexTick();
+    void restartRace();
 
 private:
     float trackLength;

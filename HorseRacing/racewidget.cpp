@@ -63,7 +63,6 @@ void RaceWidget::setupUi()
     cameraSlider->setGeometry(0, 0, SLIDER_W, SLIDER_H);
     cameraSlider->setMinimum(2);
     cameraSlider->setMaximum(CAMERA_SHIFT_Y);
-    cameraSlider->setValue(CAMERA_SHIFT_Y);
     gridLayout->addWidget(cameraSlider);
 
     // correctly adjust UI controls
@@ -111,9 +110,10 @@ void RaceWidget::controlButtonHandler()
     if (raceLogic->raceFinished()) {
         // stop timer to stop the race
         timer.stop();
-        // repeat race setup
-        setRaceLogic();
-        setRaceScene();
+        // restart race logic and scene
+        raceLogic->restartRace();
+        raceScene->restartRace();
+        cameraSlider->setValue(CAMERA_SHIFT_Y);
         // control button now allows start
         controlButton->setText("start");
     }

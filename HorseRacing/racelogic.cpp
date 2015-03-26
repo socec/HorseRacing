@@ -30,6 +30,20 @@ void RaceLogic::nexTick()
     }
 }
 
+void RaceLogic::restartRace()
+{
+    finished = false;
+    // reset camera position
+    cameraPos = 0.0;
+    // reset horse positions and standings
+    for (int i = 0; i < horsePos.size(); i++) {
+        horsePos.at(i) = 0.0;
+        standings.at(i) = 0;
+    }
+    // reset results
+    results.clear();
+}
+
 void RaceLogic::updateStandings()
 {
     // helping structure for sorting standings (sort indices based on current position)

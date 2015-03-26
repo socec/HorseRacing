@@ -48,7 +48,7 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     resultDisplay.setPos(10.0, 0.0);
     addItem(&resultDisplay);
 
-    // refresh scene
+    // display items on scene
     refreshScene();
 }
 
@@ -93,6 +93,21 @@ void RaceScene::showResults(std::vector<int> results)
     // show results on display
     resultDisplay.setPlainText(displayText);
     resultDisplay.adjustSize();
+}
+
+void RaceScene::restartRace()
+{
+    // reset camera
+    cameraPos = QVector3D(cameraParam.shiftX, cameraParam.shiftY, 0.0);
+    // reset horses
+    for (int i = 0; i < horses.size(); i++) {
+        horses.at(i)->backToStartingLine(trackParam.startShift);
+    }
+    // reset result display
+    resultDisplay.setPlainText("");
+    resultDisplay.adjustSize();
+
+    refreshScene();
 }
 
 void RaceScene::initializeParameters(int viewWidth, int viewHeight, float trackLength, int horseCount)
