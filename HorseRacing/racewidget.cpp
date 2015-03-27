@@ -14,12 +14,12 @@ RaceWidget::RaceWidget(QWidget *parent)
 
 RaceWidget::~RaceWidget()
 {
-    delete gridLayout;
-    delete view;
-    delete controlButton;
-    delete cameraSlider;
-    delete logic;
     delete scene;
+    delete logic;
+    delete cameraSlider;
+    delete controlButton;
+    delete view;
+    delete gridLayout;
 }
 
 void RaceWidget::resizeEvent(QResizeEvent *event)
