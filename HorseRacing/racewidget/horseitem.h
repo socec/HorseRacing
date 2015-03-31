@@ -10,18 +10,18 @@
 class HorseItem : public QGraphicsItem, public RaceItem
 {
 public:
-    HorseItem(QVector3D worldPos, QSizeF worldSize, float scale, SpriteSheet *spriteSheet);
+    HorseItem(QVector3D worldPos, QSizeF worldSize, float scale, const SpriteSheet& spriteSheet);
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-    void updateScenePos(QPointF newScenePos);
-    void updateWorldPos(QVector3D newWorldPos);
+    void updateScenePos(const QPointF& newScenePos);
+    void updateWorldPos(const QVector3D& newWorldPos);
 
     void backToStartingLine(float startingLineX);
 
 private:
-    SpriteSheet *spriteSheet; // points to external object, don't delete in destructor
+    const SpriteSheet& spriteSheet;
     int spriteIndex;
     bool onStartingLine;
 };

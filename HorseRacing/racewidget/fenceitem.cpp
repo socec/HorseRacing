@@ -43,13 +43,13 @@ void FenceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     update(boundingRect());
 }
 
-void FenceItem::updateScenePos(QPointF newScenePos)
+void FenceItem::updateScenePos(const QPointF& newScenePos)
 {
     // place item at requested scene postion
     setPos(newScenePos);
 }
 
-void FenceItem::updateWorldPos(QVector3D newWorldPos)
+void FenceItem::updateWorldPos(const QVector3D& newWorldPos)
 {
     // does not change world position
     return;

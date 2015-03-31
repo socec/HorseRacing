@@ -9,11 +9,11 @@ class RaceItem
 public:
     RaceItem(QVector3D worldPos, QSizeF worldSize);
 
-    QVector3D getWorldPos() { return worldPos; }
+    QVector3D getWorldPos() const { return worldPos; }
     QSizeF getWorldSize() const { return worldSize; }
 
-    virtual void updateScenePos(QPointF newScenePos) = 0;
-    virtual void updateWorldPos(QVector3D newWorldPos) = 0;
+    virtual void updateScenePos(const QPointF& newScenePos) = 0;
+    virtual void updateWorldPos(const QVector3D& newWorldPos) = 0;
 
 protected:
     QVector3D worldPos;

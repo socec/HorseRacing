@@ -9,10 +9,10 @@ class SpriteSheet
 public:
     SpriteSheet();
 
-    QPixmap getSpriteAt(int index) { return sprites.at(index); }
-    int spriteCount() { return sprites.size(); }
-    int spriteWidth() { return sw; }
-    int spriteHeight() { return sh; }
+    QPixmap getSpriteAt(int index) const { return sprites.at(index); }
+    int spriteCount() const { return sprites.size(); }
+    int spriteWidth() const { return sw; }
+    int spriteHeight() const { return sh; }
 
 private:
     QVector<QPixmap> sprites;

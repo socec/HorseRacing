@@ -23,8 +23,8 @@ public:
     RaceScene(float trackLength, int horseCount, QWidget *parent = 0);
     ~RaceScene();
 
-    void worldUpdate(std::vector<float> horsePosX, float cameraPosX);
-    void showResults(std::vector<int> results);
+    void worldUpdate(const std::vector<float>& horsePosX, const float& cameraPosX);
+    void showResults(const std::vector<int>& results);
     void restartRace();
 
 private:
@@ -48,7 +48,7 @@ private:
     } cameraParam;
 
     // scene 2.5D visualisation
-    float depthScaling(float z) { return 1.0 + (z * DEPTH_SCALE); }
+    float depthScaling(float z) const { return 1.0 + (z * DEPTH_SCALE); }
     QPointF worldToScene(QVector3D worldPos);
     void refreshScene();
 

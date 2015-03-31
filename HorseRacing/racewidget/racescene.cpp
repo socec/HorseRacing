@@ -33,7 +33,7 @@ RaceScene::RaceScene(float trackLength, int horseCount, QWidget *parent)
     for (int i = 0; i < horseCount; i++) {
         itemPos += QVector3D(0, 0, 1);
         HorseItem *horse = new HorseItem(itemPos, trackParam.horseSize, depthScaling(itemPos.z()),
-                                         &horseSprites);
+                                         horseSprites);
         horses.append(horse);
         addItem(horse);
         GateItem *gate = new GateItem(itemPos, trackParam.horseSize, depthScaling(itemPos.z()));
@@ -71,7 +71,7 @@ RaceScene::~RaceScene()
     }
 }
 
-void RaceScene::worldUpdate(std::vector<float> horsePosX, float cameraPosX)
+void RaceScene::worldUpdate(const std::vector<float>& horsePosX, const float& cameraPosX)
 {
     // advance camera but stop it on the finish line
     if (cameraPos.x() < (trackParam.startShift + trackParam.length))
@@ -89,7 +89,7 @@ void RaceScene::worldUpdate(std::vector<float> horsePosX, float cameraPosX)
     refreshScene();
 }
 
-void RaceScene::showResults(std::vector<int> results)
+void RaceScene::showResults(const std::vector<int>& results)
 {
     // do not show results if they are empty
     if (results.empty()) return;

@@ -10,7 +10,7 @@
 #include <QSlider>
 #include <QTimer>
 
-#include "racelogic.h"
+#include "racelogic/racelogic.h"
 #include "racescene.h"
 
 // widget size is 16:9, qHD
@@ -27,15 +27,12 @@
 
 #define FPS (25)
 
-#define TRACK_LENGTH (1000.0)
-#define HORSE_COUNT (5)
-
 class RaceWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    RaceWidget(QWidget *parent = 0);
+    RaceWidget(RaceLogic& logic, QWidget *parent = 0);
     ~RaceWidget();
 
     void resizeEvent(QResizeEvent *event);
@@ -50,14 +47,13 @@ private:
     void adjustUiControls();
 
     // race elements
-    RaceLogic *logic = nullptr;
+    RaceLogic& logic;
     RaceScene *scene = nullptr;
 
     // scene timing
     QTimer timer;
     int fps = FPS;
 
-    void setRaceLogic();
     void setRaceScene();
 
 private slots:

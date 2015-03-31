@@ -16,23 +16,24 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        racewidget.cpp \
-    racescene.cpp \
-    fenceitem.cpp \
-    raceitem.cpp \
-    spritesheet.cpp \
-    horseitem.cpp \
-    racelogic.cpp \
-    gateitem.cpp
+    racewidget/fenceitem.cpp \
+    racewidget/gateitem.cpp \
+    racewidget/horseitem.cpp \
+    racewidget/raceitem.cpp \
+    racewidget/racescene.cpp \
+    racewidget/spritesheet.cpp \
+    racewidget/racewidget.cpp \
+    racelogic/racelogic.cpp
 
-HEADERS  += racewidget.h \
-    racescene.h \
-    fenceitem.h \
-    raceitem.h \
-    spritesheet.h \
-    horseitem.h \
-    racelogic.h \
-    gateitem.h
+HEADERS  += \
+    racewidget/fenceitem.h \
+    racewidget/gateitem.h \
+    racewidget/horseitem.h \
+    racewidget/raceitem.h \
+    racewidget/racescene.h \
+    racewidget/racewidget.h \
+    racewidget/spritesheet.h \
+    racelogic/racelogic.h
 
 RESOURCES += \
     images.qrc

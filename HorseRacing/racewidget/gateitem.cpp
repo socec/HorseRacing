@@ -35,7 +35,7 @@ void GateItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     update(boundingRect());
 }
 
-void GateItem::updateScenePos(QPointF newScenePos)
+void GateItem::updateScenePos(const QPointF& newScenePos)
 {
     // place bottom right point at requested scene postion (match horse positioning)
     QPointF offset(boundingRect().width(), boundingRect().height());
@@ -43,7 +43,7 @@ void GateItem::updateScenePos(QPointF newScenePos)
     setPos(newScenePos - offset * scale());
 }
 
-void GateItem::updateWorldPos(QVector3D newWorldPos)
+void GateItem::updateWorldPos(const QVector3D& newWorldPos)
 {
     // does not change world position
     return;

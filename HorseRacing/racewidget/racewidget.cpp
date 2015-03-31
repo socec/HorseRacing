@@ -1,11 +1,10 @@
 #include "racewidget.h"
 
-RaceWidget::RaceWidget(QWidget *parent)
-    : QWidget(parent)
+RaceWidget::RaceWidget(RaceLogic &logic, QWidget *parent)
+    : logic(logic), QWidget(parent)
 {
     setupUi();
 
-    setRaceLogic();
     setRaceScene();
 
     timer.setInterval(1000 / fps);
@@ -15,7 +14,6 @@ RaceWidget::RaceWidget(QWidget *parent)
 RaceWidget::~RaceWidget()
 {
     delete scene;
-    delete logic;
     delete cameraSlider;
     delete controlButton;
     delete view;
@@ -83,19 +81,10 @@ void RaceWidget::adjustUiControls()
     cameraSlider->move(sliderTopLeft);
 }
 
-void RaceWidget::setRaceLogic()
-{
-    if (logic) delete logic;
-    logic = new RaceLogic(TRACK_LENGTH, HORSE_COUNT);
-}
-
 void RaceWidget::setRaceScene()
 {
-    // don't set race scene without race logic
-    if (!logic) setRaceLogic();
-
     if (scene) delete scene;
-    scene = new RaceScene(logic->getTrackLength(), logic->getHorseCount(), view);
+    scene = new RaceScene(logic.getTrackLength(), logic.getHorseCount(), view);
 
     // set scene to view
     view->setScene(scene);
@@ -107,11 +96,11 @@ void RaceWidget::setRaceScene()
 void RaceWidget::controlButtonHandler()
 {
     // if race is finished control button allows restart
-    if (logic->raceFinished()) {
+    if (logic.raceFinished()) {
         // stop timer to stop the race
         timer.stop();
         // restart race logic and scene
-        logic->restartRace();
+        logic.restartRace();
         scene->restartRace();
         cameraSlider->setValue(CAMERA_SHIFT_Y);
         // control button now allows start
@@ -128,16 +117,16 @@ void RaceWidget::controlButtonHandler()
 
 void RaceWidget::timerHandler()
 {
-    logic->nexTick();
-    scene->worldUpdate(logic->getHorsePos(), logic->getCameraPos());
+    logic.nexTick();
+    scene->worldUpdate(logic.getHorsePos(), logic.getCameraPos());
 
     // show race results if needed
-    if (!logic->getResults().empty()) {
-        scene->showResults(logic->getResults());
+    if (!logic.getResults().empty()) {
+        scene->showResults(logic.getResults());
     }
 
     // if race is finished control button allows restart
-    if (logic->raceFinished()) {
+    if (logic.raceFinished()) {
         // enable control button after the race
         controlButton->setEnabled(true);
         // control button now allows restart

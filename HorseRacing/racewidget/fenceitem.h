@@ -16,10 +16,10 @@ public:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-    void updateScenePos(QPointF newScenePos);
-    void updateWorldPos(QVector3D newWorldPos);
+    void updateScenePos(const QPointF& newScenePos);
+    void updateWorldPos(const QVector3D& newWorldPos);
 
-    int getPostCount() { return postLines.size(); }
+    int getPostCount() const { return postLines.size(); }
 
 private:
     QVector<QLineF> postLines;

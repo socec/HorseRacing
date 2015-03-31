@@ -11,14 +11,14 @@ class RaceLogic
 public:
     RaceLogic(float trackLength, int horseCount);
 
-    float getTrackLength() { return trackLength; }
-    std::vector<float> getHorsePos() { return horsePos; }
-    int getHorseCount() { return horsePos.size(); }
-    float getCameraPos() { return cameraPos; }
-    std::vector<int> getStandings() { return standings; }
-    std::vector<int> getResults() { return results; }
+    float getTrackLength() const { return trackLength; }
+    std::vector<float> getHorsePos() const { return horsePos; }
+    int getHorseCount() const { return horsePos.size(); }
+    float getCameraPos() const { return cameraPos; }
+    std::vector<int> getStandings() const { return standings; }
+    std::vector<int> getResults() const { return results; }
 
-    bool raceFinished() { return finished; }
+    bool raceFinished() const { return finished; }
     void nexTick();
     void restartRace();
 
