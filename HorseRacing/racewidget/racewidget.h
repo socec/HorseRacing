@@ -6,11 +6,9 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QGraphicsView>
-#include <QPushButton>
 #include <QSlider>
-#include <QTimer>
+#include <QLabel>
 
-#include "racelogic/racelogic.h"
 #include "racescene.h"
 
 // widget size is 16:9, qHD
@@ -20,45 +18,32 @@
 #define VIEW_W (WIDGET_W)
 #define VIEW_H (WIDGET_H)
 
-#define BUTTON_W (100)
-#define BUTTON_H (30)
 #define SLIDER_W (30)
 #define SLIDER_H (100)
-
-#define FPS (25)
 
 class RaceWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    RaceWidget(RaceLogic& logic, QWidget *parent = 0);
+    explicit RaceWidget(float trackLength, int horseCount, QWidget *parent = 0);
     ~RaceWidget();
 
     void resizeEvent(QResizeEvent *event);
 
+    void raceUpdate(const std::vector<float>& horsePosX, const float& cameraPosX);
+    void showResults(const std::vector<int>& results);
+    void restartRace();
+
 private:
-    // UI elements
     QGridLayout *gridLayout = nullptr;
-    QGraphicsView *view = nullptr;
-    QPushButton *controlButton = nullptr;
+    QGraphicsView *graphicsView = nullptr;
     QSlider *cameraSlider = nullptr;
-    void setupUi();
-    void adjustUiControls();
+    QLabel *resultDisplay = nullptr;
+    void uiSetup();
+    void uiAdjust();
 
-    // race elements
-    RaceLogic& logic;
     RaceScene *scene = nullptr;
-
-    // scene timing
-    QTimer timer;
-    int fps = FPS;
-
-    void setRaceScene();
-
-private slots:
-    void controlButtonHandler();
-    void timerHandler();
 };
 
 #endif // RACEWIDGET_H

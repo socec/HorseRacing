@@ -1,32 +1,69 @@
 #include "racewidget.h"
 
-RaceWidget::RaceWidget(RaceLogic &logic, QWidget *parent)
-    : logic(logic), QWidget(parent)
+RaceWidget::RaceWidget(float trackLength, int horseCount, QWidget *parent)
+    : QWidget(parent)
 {
-    setupUi();
+    // prepare UI
+    uiSetup();
+    uiAdjust();
 
-    setRaceScene();
-
-    timer.setInterval(1000 / fps);
-    connect(&timer, SIGNAL(timeout()), this, SLOT(timerHandler()));
+    // set scene to view
+    scene = new RaceScene(trackLength, horseCount, graphicsView);
+    graphicsView->setScene(scene);
+    // connect camera slider to scene
+    connect(cameraSlider, SIGNAL(valueChanged(int)), scene, SLOT(cameraVerticalChange(int)));
+    cameraSlider->setValue(CAMERA_SHIFT_Y);
 }
 
 RaceWidget::~RaceWidget()
 {
     delete scene;
+    delete resultDisplay;
     delete cameraSlider;
-    delete controlButton;
-    delete view;
+    delete graphicsView;
     delete gridLayout;
 }
 
 void RaceWidget::resizeEvent(QResizeEvent *event)
 {
-    view->resize(event->size());
-    adjustUiControls();
+    graphicsView->resize(event->size());
+    uiAdjust();
 }
 
-void RaceWidget::setupUi()
+void RaceWidget::raceUpdate(const std::vector<float>& horsePosX, const float &cameraPosX)
+{
+    scene->worldUpdate(horsePosX, cameraPosX);
+}
+
+void RaceWidget::showResults(const std::vector<int>& results)
+{
+    // do not show results if they are empty
+    if (results.empty()) return;
+
+    resultDisplay->hide();
+    // construct display text from results vector
+    QString displayText("Results:\n");
+    for (int i = 0; i < results.size(); i++) {
+        displayText.append("    " + QString::number(i + 1) + ". ");
+        displayText.append("track " + QString::number(results.at(i) + 1) + "\n");
+    }
+    // show results on display and widget
+    resultDisplay->setText(displayText);
+    resultDisplay->show();
+    uiAdjust();
+}
+
+void RaceWidget::restartRace()
+{
+    // restart scene
+    scene->restartRace();
+    // reset UI
+    cameraSlider->setValue(CAMERA_SHIFT_Y);
+    resultDisplay->setText("");
+    resultDisplay->hide();
+}
+
+void RaceWidget::uiSetup()
 {
     // set the main widget
     setMinimumSize(WIDGET_W, WIDGET_H);
@@ -39,23 +76,15 @@ void RaceWidget::setupUi()
     setLayout(gridLayout);
 
     // set view
-    view = new QGraphicsView(this);
-    view->setMinimumSize(VIEW_W, VIEW_H);
-    view->setMaximumSize(VIEW_W, VIEW_H);
-    view->setGeometry(0, 0, VIEW_W, VIEW_H);
-    view->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    gridLayout->addWidget(view);
-
-    // set control button
-    controlButton = new QPushButton("start", view);
-    controlButton->setMinimumSize(BUTTON_W, BUTTON_H);
-    controlButton->setMaximumSize(BUTTON_W, BUTTON_H);
-    controlButton->setGeometry(0, 0, BUTTON_W, BUTTON_H);
-    connect(controlButton, SIGNAL(clicked()), this, SLOT(controlButtonHandler()));
-    gridLayout->addWidget(controlButton);
+    graphicsView = new QGraphicsView(this);
+    graphicsView->setMinimumSize(VIEW_W, VIEW_H);
+    graphicsView->setMaximumSize(VIEW_W, VIEW_H);
+    graphicsView->setGeometry(0, 0, VIEW_W, VIEW_H);
+    graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    gridLayout->addWidget(graphicsView);
 
     // set camera slider
-    cameraSlider = new QSlider(Qt::Vertical, view);
+    cameraSlider = new QSlider(Qt::Vertical, this);
     cameraSlider->setMinimumSize(SLIDER_W, SLIDER_H);
     cameraSlider->setMaximumSize(SLIDER_W, SLIDER_H);
     cameraSlider->setGeometry(0, 0, SLIDER_W, SLIDER_H);
@@ -63,73 +92,19 @@ void RaceWidget::setupUi()
     cameraSlider->setMaximum(CAMERA_SHIFT_Y);
     gridLayout->addWidget(cameraSlider);
 
-    // correctly adjust UI controls
-    adjustUiControls();
+    // set result display, but don't show it until requested
+    resultDisplay = new QLabel(this);
+    resultDisplay->setFont(QFont("Arial", 12, QFont::Bold));
+    resultDisplay->setStyleSheet("QLabel { background-color : rgb(230, 230, 230); }");
+    resultDisplay->setMargin(10);
+    resultDisplay->hide();
+    gridLayout->addWidget(resultDisplay);
 }
 
-void RaceWidget::adjustUiControls()
+void RaceWidget::uiAdjust()
 {
-    // align controls to bottom left corner of the view
-    QPoint viewBottomLeft = view->geometry().bottomLeft();
-
-    // adjust control button
-    QPoint buttonTopLeft = viewBottomLeft - QPoint(0, controlButton->height());
-    controlButton->move(buttonTopLeft);
-
-    // adjust camera slider
-    QPoint sliderTopLeft = buttonTopLeft - QPoint(0, cameraSlider->height());
-    cameraSlider->move(sliderTopLeft);
-}
-
-void RaceWidget::setRaceScene()
-{
-    if (scene) delete scene;
-    scene = new RaceScene(logic.getTrackLength(), logic.getHorseCount(), view);
-
-    // set scene to view
-    view->setScene(scene);
-    // connect camera slider to scene
-    connect(cameraSlider, SIGNAL(valueChanged(int)), scene, SLOT(cameraVerticalChange(int)));
-    cameraSlider->setValue(CAMERA_SHIFT_Y);
-}
-
-void RaceWidget::controlButtonHandler()
-{
-    // if race is finished control button allows restart
-    if (logic.raceFinished()) {
-        // stop timer to stop the race
-        timer.stop();
-        // restart race logic and scene
-        logic.restartRace();
-        scene->restartRace();
-        cameraSlider->setValue(CAMERA_SHIFT_Y);
-        // control button now allows start
-        controlButton->setText("start");
-    }
-    // otherwise control button allows start
-    else {
-        // start timer to start the race
-        timer.start();
-        // disable control button during the race
-        controlButton->setEnabled(false);
-    }
-}
-
-void RaceWidget::timerHandler()
-{
-    logic.nexTick();
-    scene->worldUpdate(logic.getHorsePos(), logic.getCameraPos());
-
-    // show race results if needed
-    if (!logic.getResults().empty()) {
-        scene->showResults(logic.getResults());
-    }
-
-    // if race is finished control button allows restart
-    if (logic.raceFinished()) {
-        // enable control button after the race
-        controlButton->setEnabled(true);
-        // control button now allows restart
-        controlButton->setText("restart");
-    }
+    QPoint topLeft = graphicsView->geometry().topLeft();
+    cameraSlider->move(topLeft + QPoint(10, 10));
+    resultDisplay->move(topLeft + QPoint(cameraSlider->width() + 10, 10));
+    resultDisplay->adjustSize();
 }

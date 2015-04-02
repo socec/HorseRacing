@@ -5,7 +5,6 @@
 #include <QWidget>
 #include <QVector3D>
 #include <QGraphicsLineItem>
-#include <QGraphicsTextItem>
 
 #include "fenceitem.h"
 #include "spritesheet.h"
@@ -20,11 +19,10 @@ class RaceScene : public QGraphicsScene
 {
     Q_OBJECT // for signals and slots
 public:
-    RaceScene(float trackLength, int horseCount, QWidget *parent = 0);
+    RaceScene(float trackLength, int horseCount, QWidget *parent);
     ~RaceScene();
 
     void worldUpdate(const std::vector<float>& horsePosX, const float& cameraPosX);
-    void showResults(const std::vector<int>& results);
     void restartRace();
 
 private:
@@ -62,9 +60,6 @@ private:
     // track marks
     QVector<QGraphicsLineItem*> trackMarks;
     void updateTrackMarks();
-
-    // race results
-    QGraphicsTextItem resultDisplay;
 
 public slots:
     void cameraVerticalChange(int newY);

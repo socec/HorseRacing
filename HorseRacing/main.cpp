@@ -1,9 +1,5 @@
 #include <QApplication>
-#include "racelogic/racelogic.h"
-#include "racewidget/racewidget.h"
-
-#define TRACK_LENGTH (1000.0)
-#define HORSE_COUNT (5)
+#include "racecontrol/racecontrol.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,12 +8,10 @@ int main(int argc, char *argv[])
     QMainWindow window;
     window.show();
 
-    RaceLogic logic(TRACK_LENGTH, HORSE_COUNT);
+    RaceControl control(&window);
+    control.show();
 
-    RaceWidget race(logic, &window);
-    race.show();
-
-    window.setGeometry(50, 50, race.width(), race.height());
+    window.setGeometry(50, 50, control.width(), control.height());
     window.updateGeometry();
 
     return a.exec();
