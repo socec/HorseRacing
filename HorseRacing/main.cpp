@@ -1,6 +1,8 @@
 #include <QApplication>
 #include "racecontrol/racecontrol.h"
 
+#include "network/raceserver.h"
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -10,6 +12,8 @@ int main(int argc, char *argv[])
 
     RaceControl control(&window);
     control.show();
+
+    RaceServer server;
 
     window.setGeometry(50, 50, control.width(), control.height());
     window.updateGeometry();

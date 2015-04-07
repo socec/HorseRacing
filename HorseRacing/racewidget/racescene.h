@@ -17,7 +17,7 @@
 
 class RaceScene : public QGraphicsScene
 {
-    Q_OBJECT // for signals and slots
+    Q_OBJECT
 public:
     RaceScene(float trackLength, int horseCount, QWidget *parent);
     ~RaceScene();

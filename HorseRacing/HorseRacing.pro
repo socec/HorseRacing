@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 # adding custom flags
 QMAKE_CXXFLAGS += -std=c++11
@@ -24,7 +24,9 @@ SOURCES += main.cpp\
     racewidget/spritesheet.cpp \
     racewidget/racewidget.cpp \
     racelogic/racelogic.cpp \
-    racecontrol/racecontrol.cpp
+    racecontrol/racecontrol.cpp \
+    network/raceserver.cpp \
+    network/raceclient.cpp
 
 HEADERS  += \
     racewidget/fenceitem.h \
@@ -35,7 +37,9 @@ HEADERS  += \
     racewidget/racewidget.h \
     racewidget/spritesheet.h \
     racelogic/racelogic.h \
-    racecontrol/racecontrol.h
+    racecontrol/racecontrol.h \
+    network/raceserver.h \
+    network/raceclient.h
 
 RESOURCES += \
     images.qrc

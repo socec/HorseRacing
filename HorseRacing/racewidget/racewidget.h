@@ -24,7 +24,6 @@
 class RaceWidget : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit RaceWidget(float trackLength, int horseCount, QWidget *parent = 0);
     ~RaceWidget();
