@@ -16,6 +16,8 @@ QRectF GateItem::boundingRect() const
 
 void GateItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
     // separating top and bottom
     float topHeight = boundingRect().height() / 2;
     float bottomHeight = boundingRect().height() - topHeight;
@@ -46,5 +48,6 @@ void GateItem::updateScenePos(const QPointF& newScenePos)
 void GateItem::updateWorldPos(const QVector3D& newWorldPos)
 {
     // does not change world position
+    Q_UNUSED(newWorldPos);
     return;
 }

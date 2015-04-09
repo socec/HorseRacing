@@ -30,9 +30,11 @@ public:
 
     void resizeEvent(QResizeEvent *event);
 
-    void raceUpdate(const std::vector<float>& horsePosX, const float& cameraPosX);
-    void showResults(const std::vector<int>& results);
     void restartRace();
+
+public slots:
+    void updatePositions(const std::vector<float>& horsePosX, const float& cameraPosX);
+    void showResults(const std::vector<int>& currentResults);
 
 private:
     QGridLayout *gridLayout = nullptr;

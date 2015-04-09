@@ -21,6 +21,8 @@ QRectF HorseItem::boundingRect() const
 
 void HorseItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
     // draw current sprite
     QPixmap sprite = spriteSheet.getSpriteAt(spriteIndex);
     painter->drawPixmap(boundingRect(), sprite, sprite.rect());

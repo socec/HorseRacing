@@ -23,10 +23,11 @@ SOURCES += main.cpp\
     racewidget/racescene.cpp \
     racewidget/spritesheet.cpp \
     racewidget/racewidget.cpp \
-    racelogic/racelogic.cpp \
     racecontrol/racecontrol.cpp \
     network/raceserver.cpp \
-    network/raceclient.cpp
+    network/raceclient.cpp \
+    racemodel/racemodel.cpp \
+    racemodel/localracemodel.cpp
 
 HEADERS  += \
     racewidget/fenceitem.h \
@@ -36,10 +37,11 @@ HEADERS  += \
     racewidget/racescene.h \
     racewidget/racewidget.h \
     racewidget/spritesheet.h \
-    racelogic/racelogic.h \
     racecontrol/racecontrol.h \
     network/raceserver.h \
-    network/raceclient.h
+    network/raceclient.h \
+    racemodel/racemodel.h \
+    racemodel/localracemodel.h
 
 RESOURCES += \
     images.qrc

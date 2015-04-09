@@ -11,10 +11,6 @@
 #include "horseitem.h"
 #include "gateitem.h"
 
-#define CAMERA_SHIFT_Y (20.0) // initial camera Y axis shift in world units
-#define DEPTH_SCALE (0.2)     // scale factor for scene depth
-#define POSTS_PER_MARK (5)    // number of fence posts between track marks
-
 class RaceScene : public QGraphicsScene
 {
     Q_OBJECT
@@ -22,8 +18,11 @@ public:
     RaceScene(float trackLength, int horseCount, QWidget *parent);
     ~RaceScene();
 
-    void worldUpdate(const std::vector<float>& horsePosX, const float& cameraPosX);
+    void updatePositions(const std::vector<float>& horsePosX, const float& cameraPosX);
     void restartRace();
+
+public slots:
+    void cameraVerticalChange(int newY);
 
 private:
     // scene parameters
@@ -35,18 +34,18 @@ private:
         float startShift;
         float postSpacing;
         int startPostIndex;
-        int postsPerMark = POSTS_PER_MARK;
+        int postsPerMark = 5; // number of fence posts between track marks
         QSizeF fenceSize;
         QSizeF horseSize;
     } trackParam;
     // camera parameters
     struct {
         float shiftX = 0.0;
-        float shiftY = CAMERA_SHIFT_Y;
+        float shiftY = 20.0; // initial camera Y axis shift in world units
     } cameraParam;
 
     // scene 2.5D visualisation
-    float depthScaling(float z) const { return 1.0 + (z * DEPTH_SCALE); }
+    float depthScaling(float z) const { return 1.0 + (z * 0.2); } // scale factor for scene depth
     QPointF worldToScene(QVector3D worldPos);
     void refreshScene();
 
@@ -60,9 +59,6 @@ private:
     // track marks
     QVector<QGraphicsLineItem*> trackMarks;
     void updateTrackMarks();
-
-public slots:
-    void cameraVerticalChange(int newY);
 };
 
 #endif // RACESCENE_H

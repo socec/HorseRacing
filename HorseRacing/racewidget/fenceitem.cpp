@@ -30,6 +30,8 @@ QRectF FenceItem::boundingRect() const
 
 void FenceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
     QPen pen(Qt::white);
     // draw posts
     pen.setWidthF(2.5);
@@ -52,5 +54,6 @@ void FenceItem::updateScenePos(const QPointF& newScenePos)
 void FenceItem::updateWorldPos(const QVector3D& newWorldPos)
 {
     // does not change world position
+    Q_UNUSED(newWorldPos);
     return;
 }

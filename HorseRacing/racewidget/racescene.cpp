@@ -65,15 +65,15 @@ RaceScene::~RaceScene()
     }
 }
 
-void RaceScene::worldUpdate(const std::vector<float>& horsePosX, const float& cameraPosX)
+void RaceScene::updatePositions(const std::vector<float>& horsePosX, const float& cameraPosX)
 {
-    // advance camera but stop it on the finish line
+    // camera is moving but stops on the finish line
     if (cameraPos.x() < (trackParam.startShift + trackParam.length))
     {
         cameraPos.setX(cameraParam.shiftX + cameraPosX * trackParam.adjustPos);
     }
 
-    // advance horses
+    // horses are moving
     for (int i = 0; i < horses.size(); i++) {
         QVector3D horsePos = horses.at(i)->getWorldPos();
         horsePos.setX(trackParam.startShift + horsePosX.at(i) * trackParam.adjustPos);
@@ -92,6 +92,13 @@ void RaceScene::restartRace()
         horses.at(i)->backToStartingLine(trackParam.startShift);
     }
 
+    refreshScene();
+}
+
+void RaceScene::cameraVerticalChange(int newY)
+{
+    // directly propagate new coordinate and refresh the scene
+    cameraPos.setY(newY);
     refreshScene();
 }
 
@@ -185,11 +192,4 @@ void RaceScene::updateTrackMarks()
             trackMarks.at(i)->setLine(QLineF(backFenceMark, frontFenceMark));
         }
     }
-}
-
-void RaceScene::cameraVerticalChange(int newY)
-{
-    // directly propagate new coordinate and refresh the scene
-    cameraPos.setY(newY);
-    refreshScene();
 }

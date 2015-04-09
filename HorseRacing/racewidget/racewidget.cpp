@@ -12,7 +12,7 @@ RaceWidget::RaceWidget(float trackLength, int horseCount, QWidget *parent)
     graphicsView->setScene(scene);
     // connect camera slider to scene
     connect(cameraSlider, SIGNAL(valueChanged(int)), scene, SLOT(cameraVerticalChange(int)));
-    cameraSlider->setValue(CAMERA_SHIFT_Y);
+    cameraSlider->setValue(cameraSlider->maximum());
 }
 
 RaceWidget::~RaceWidget()
@@ -30,37 +30,37 @@ void RaceWidget::resizeEvent(QResizeEvent *event)
     uiAdjust();
 }
 
-void RaceWidget::raceUpdate(const std::vector<float>& horsePosX, const float &cameraPosX)
-{
-    scene->worldUpdate(horsePosX, cameraPosX);
-}
-
-void RaceWidget::showResults(const std::vector<int>& results)
-{
-    // do not show results if they are empty
-    if (results.empty()) return;
-
-    resultDisplay->hide();
-    // construct display text from results vector
-    QString displayText("Results:\n");
-    for (int i = 0; i < results.size(); i++) {
-        displayText.append("    " + QString::number(i + 1) + ". ");
-        displayText.append("track " + QString::number(results.at(i) + 1) + "\n");
-    }
-    // show results on display and widget
-    resultDisplay->setText(displayText);
-    resultDisplay->show();
-    uiAdjust();
-}
-
 void RaceWidget::restartRace()
 {
     // restart scene
     scene->restartRace();
     // reset UI
-    cameraSlider->setValue(CAMERA_SHIFT_Y);
+    cameraSlider->setValue(cameraSlider->maximum());
     resultDisplay->setText("");
     resultDisplay->hide();
+}
+
+void RaceWidget::updatePositions(const std::vector<float>& horsePosX, const float &cameraPosX)
+{
+    scene->updatePositions(horsePosX, cameraPosX);
+}
+
+void RaceWidget::showResults(const std::vector<int>& currentResults)
+{
+    // do not show results if they are empty
+    if (currentResults.empty()) return;
+
+    resultDisplay->hide();
+    // construct display text from results vector
+    QString displayText("Results:\n");
+    for (unsigned int i = 0; i < currentResults.size(); i++) {
+        displayText.append("    " + QString::number(i + 1) + ". ");
+        displayText.append("track " + QString::number(currentResults.at(i) + 1) + "\n");
+    }
+    // show results on display and widget
+    resultDisplay->setText(displayText);
+    resultDisplay->show();
+    uiAdjust();
 }
 
 void RaceWidget::uiSetup()
@@ -89,7 +89,7 @@ void RaceWidget::uiSetup()
     cameraSlider->setMaximumSize(SLIDER_W, SLIDER_H);
     cameraSlider->setGeometry(0, 0, SLIDER_W, SLIDER_H);
     cameraSlider->setMinimum(2);
-    cameraSlider->setMaximum(CAMERA_SHIFT_Y);
+    cameraSlider->setMaximum(20);
     gridLayout->addWidget(cameraSlider);
 
     // set result display, but don't show it until requested

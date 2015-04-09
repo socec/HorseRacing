@@ -4,15 +4,12 @@ RaceControl::RaceControl(QWidget *parent) :
     QWidget(parent)
 {
     uiSetup();
-
-    timer.setInterval(1000 / fps);
-    connect(&timer, SIGNAL(timeout()), this, SLOT(timerHandler()));
 }
 
 RaceControl::~RaceControl()
 {
     if (view) delete view;
-    if (logic) delete logic;
+    if (model) delete model;
     delete startButton;
     delete gridLayout;
 }
@@ -37,57 +34,27 @@ void RaceControl::uiSetup()
 
 void RaceControl::startButtonHandler()
 {
-    // initialize race logic and view
-    logic = new RaceLogic(TRACK_LENGTH, HORSE_COUNT);
+    // initialize race model and view
+    model = new LocalRaceModel(TRACK_LENGTH, HORSE_COUNT);
     view = new RaceWidget(TRACK_LENGTH, HORSE_COUNT);
     gridLayout->addWidget(view);
+    connect(model, SIGNAL(positionsChanged(std::vector<float>,float)),
+            view, SLOT(updatePositions(std::vector<float>,float)));
+    connect(model, SIGNAL(resultsAvailable(std::vector<int>)),
+            view, SLOT(showResults(std::vector<int>)));
+    connect(model, SIGNAL(modelStopped()),
+            this, SLOT(modelHandler()));
 
-    // remove start button and start the timer
+    // remove start button and start the race
     gridLayout->removeWidget(startButton);
-    timer.start();
-    state = R_START;
+    model->startRace();
 }
 
-void RaceControl::timerHandler()
+void RaceControl::modelHandler()
 {
-    switch(state) {
-    case R_START:
-        // wait for 1 second before starting the race
-        if (++timerCounter == 1 * fps) {
-            state = R_RUN;
-            timerCounter = 0;
-        }
-        break;
-    case R_RUN:
-        // update race status
-        logic->nexTick();
-        view->raceUpdate(logic->getHorsePos(), logic->getCameraPos());
-        // check if race finished
-        if (logic->raceFinished()) {
-            state = R_FINISH;
-        }
-        // show results if needed
-        if (!logic->getResults().empty()) {
-            view->showResults(logic->getResults());
-        }
-        break;
-    case R_FINISH:
-        // keep updating race status for 3 seconds after race finished
-        if (++timerCounter < 3 * fps) {
-            logic->nexTick();
-            view->raceUpdate(logic->getHorsePos(), logic->getCameraPos());
-        }
-        // now reset
-        else {
-            state = R_INIT;
-            timerCounter = 0;
-            delete view;
-            delete logic;
-            view = nullptr;
-            logic = nullptr;
-            gridLayout->addWidget(startButton);
-            timer.stop();
-        }
-        break;
-    }
+    delete view;
+    delete model;
+    view = nullptr;
+    model = nullptr;
+    gridLayout->addWidget(startButton);
 }

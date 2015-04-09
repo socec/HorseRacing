@@ -6,10 +6,9 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QPushButton>
-#include <QTimer>
 
-#include "racelogic/racelogic.h"
 #include "racewidget/racewidget.h"
+#include "racemodel/localracemodel.h"
 
 #define TRACK_LENGTH (1000.0)
 #define HORSE_COUNT (5)
@@ -32,19 +31,12 @@ private:
     QPushButton *startButton = nullptr;
     void uiSetup();
 
-    RaceLogic *logic = nullptr;
+    LocalRaceModel *model = nullptr;
     RaceWidget *view = nullptr;
-
-    QTimer timer;
-    int fps = FPS;
-    int timerCounter = 0;
-
-    enum RaceState {R_INIT, R_START, R_RUN, R_FINISH};
-    RaceState state = R_INIT;
 
 private slots:
     void startButtonHandler();
-    void timerHandler();
+    void modelHandler();
 };
 
 #endif // RACECONTROL_H
