@@ -17,6 +17,9 @@ public:
     float getCameraPosition() const { return cameraPosition; }
     std::vector<int> getResults() const { return results; }
 
+public slots:
+    virtual void startRace() = 0;
+
 signals:
     void positionsChanged(const std::vector<float>& horsePosX, const float& cameraPosX);
     void resultsAvailable(const std::vector<int>& currentResults);

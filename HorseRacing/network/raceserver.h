@@ -2,8 +2,8 @@
 #define RACESERVER_H
 
 #include <QObject>
-#include <QTcpSocket>
 #include <QTcpServer>
+#include <QTcpSocket>
 
 class RaceServer : public QObject
 {
@@ -11,6 +11,8 @@ class RaceServer : public QObject
 public:
     explicit RaceServer(QObject *parent = 0);
     ~RaceServer();
+
+    void sendDataToClients(const char *data);
 
 private:
     QTcpServer *server = nullptr;

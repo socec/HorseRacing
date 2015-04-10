@@ -66,9 +66,9 @@ void RaceWidget::showResults(const std::vector<int>& currentResults)
 void RaceWidget::uiSetup()
 {
     // set the main widget
-    setMinimumSize(WIDGET_W, WIDGET_H);
-    setMaximumSize(WIDGET_W, WIDGET_H);
-    setGeometry(0, 0, WIDGET_W, WIDGET_H);
+    setMinimumSize(widgetWidth, widgetHeight);
+    setMaximumSize(widgetWidth, widgetHeight);
+    setGeometry(0, 0, widgetWidth, widgetHeight);
 
     // set grid layout
     gridLayout = new QGridLayout(this);
@@ -77,17 +77,17 @@ void RaceWidget::uiSetup()
 
     // set view
     graphicsView = new QGraphicsView(this);
-    graphicsView->setMinimumSize(VIEW_W, VIEW_H);
-    graphicsView->setMaximumSize(VIEW_W, VIEW_H);
-    graphicsView->setGeometry(0, 0, VIEW_W, VIEW_H);
+    graphicsView->setMinimumSize(widgetWidth, widgetHeight);
+    graphicsView->setMaximumSize(widgetWidth, widgetHeight);
+    graphicsView->setGeometry(0, 0, widgetWidth, widgetHeight);
     graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     gridLayout->addWidget(graphicsView);
 
     // set camera slider
     cameraSlider = new QSlider(Qt::Vertical, this);
-    cameraSlider->setMinimumSize(SLIDER_W, SLIDER_H);
-    cameraSlider->setMaximumSize(SLIDER_W, SLIDER_H);
-    cameraSlider->setGeometry(0, 0, SLIDER_W, SLIDER_H);
+    cameraSlider->setMinimumSize(sliderWidth, sliderHeight);
+    cameraSlider->setMaximumSize(sliderWidth, sliderHeight);
+    cameraSlider->setGeometry(0, 0, sliderWidth, sliderHeight);
     cameraSlider->setMinimum(2);
     cameraSlider->setMaximum(20);
     gridLayout->addWidget(cameraSlider);

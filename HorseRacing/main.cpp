@@ -13,8 +13,6 @@ int main(int argc, char *argv[])
     RaceControl control(&window);
     control.show();
 
-    RaceServer server;
-
     window.setGeometry(50, 50, control.width(), control.height());
     window.updateGeometry();
 

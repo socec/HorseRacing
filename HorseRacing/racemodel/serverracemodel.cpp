@@ -1,21 +1,19 @@
-#include "localracemodel.h"
+#include "serverracemodel.h"
 
-#include <cstdlib> // rand()
-
-LocalRaceModel::LocalRaceModel(float trackLength, int horseCount, QObject *parent)
+ServerRaceModel::ServerRaceModel(float trackLength, int horseCount, QObject *parent)
     : RaceModel(trackLength, horseCount, parent)
 {
     timer.setInterval(1000 / fps);
     connect(&timer, SIGNAL(timeout()), this, SLOT(timerHandler()));
 }
 
-void LocalRaceModel::startRace()
+void ServerRaceModel::startRace()
 {
     // delay start for 1 second
     QTimer::singleShot(1000, this, SLOT(delayedStart()));
 }
 
-void LocalRaceModel::nextModelStep()
+void ServerRaceModel::nextModelStep()
 {
     // advance camera at constant speed
     cameraPosition += baseSpeed;
@@ -26,9 +24,21 @@ void LocalRaceModel::nextModelStep()
     }
 
     emit positionsChanged(horsePositions, cameraPosition);
+
+    server.sendDataToClients(createMsgPositions());
 }
 
-void LocalRaceModel::timerHandler()
+QByteArray ServerRaceModel::createMsgPositions()
+{
+    QByteArray msg;
+    for (unsigned int i = 0; i < horsePositions.size(); i++) {
+        msg.append("H@" + QString::number((double) horsePositions.at(i), 'f', 2));
+    }
+    msg.append("C@" + QString::number((double) cameraPosition, 'f', 2));
+    return msg;
+}
+
+void ServerRaceModel::timerHandler()
 {
     // keep calculating next steps of the model
     nextModelStep();
@@ -40,12 +50,12 @@ void LocalRaceModel::timerHandler()
     }
 }
 
-void LocalRaceModel::delayedStart()
+void ServerRaceModel::delayedStart()
 {
     timer.start();
 }
 
-void LocalRaceModel::delayedStop()
+void ServerRaceModel::delayedStop()
 {
     timer.stop();
     emit modelStopped();

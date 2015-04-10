@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     network/raceserver.cpp \
     network/raceclient.cpp \
     racemodel/racemodel.cpp \
-    racemodel/localracemodel.cpp
+    racemodel/serverracemodel.cpp \
+    racemodel/clientracemodel.cpp
 
 HEADERS  += \
     racewidget/fenceitem.h \
@@ -41,7 +42,8 @@ HEADERS  += \
     network/raceserver.h \
     network/raceclient.h \
     racemodel/racemodel.h \
-    racemodel/localracemodel.h
+    racemodel/serverracemodel.h \
+    racemodel/clientracemodel.h
 
 RESOURCES += \
     images.qrc

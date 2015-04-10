@@ -8,11 +8,11 @@
 #include <QPushButton>
 
 #include "racewidget/racewidget.h"
-#include "racemodel/localracemodel.h"
+#include "racemodel/serverracemodel.h"
+#include "racemodel/clientracemodel.h"
 
 #define TRACK_LENGTH (1000.0)
 #define HORSE_COUNT (5)
-#define FPS (25)
 
 // widget size is 16:9, qHD
 #define WIDGET_W (960)
@@ -29,13 +29,18 @@ public:
 private:
     QGridLayout *gridLayout = nullptr;
     QPushButton *startButton = nullptr;
+    QPushButton *serverButton = nullptr;
+    QPushButton *clientButton = nullptr;
     void uiSetup();
 
-    LocalRaceModel *model = nullptr;
+    RaceModel *model = nullptr;
     RaceWidget *view = nullptr;
+    void initRaceView();
 
 private slots:
     void startButtonHandler();
+    void serverButtonHandler();
+    void clientButtonHandler();
     void modelHandler();
 };
 

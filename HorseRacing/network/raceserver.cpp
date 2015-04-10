@@ -2,14 +2,14 @@
 
 #include "iostream"
 
-RaceServer::RaceServer(QObject *parent) :
-    QObject(parent)
+RaceServer::RaceServer(QObject *parent)
+    : QObject(parent)
 {
     server = new QTcpServer(this);
     // new client connections emit signal
     connect(server, SIGNAL(newConnection()), this, SLOT(newClientConnection()));
 
-    // start server
+    // start the server
     if (!server->listen(QHostAddress::Any, 4000)) {
         std::cerr << "Server could not start\n" << server->errorString().toStdString();
     }
@@ -30,19 +30,29 @@ RaceServer::~RaceServer()
     }
 }
 
+void RaceServer::sendDataToClients(const char *data)
+{
+    if (!clientSocket) return;
+    clientSocket->write(data);
+    clientSocket->flush();
+    clientSocket->waitForBytesWritten(3000);
+}
+
 void RaceServer::newClientConnection()
 {
     // accept new connection
     clientSocket = server->nextPendingConnection();
     std::cerr << "new client connected!\n";
 
-    // clients with available data emit signal
+    // clients emit signal when they send data
     connect(clientSocket, SIGNAL(readyRead()), this, SLOT(clientRead()));
 
     // send welcome message to client
+    /*
     clientSocket->write("Hello client!\n");
     clientSocket->flush();
     clientSocket->waitForBytesWritten(3000);
+    */
 }
 
 void RaceServer::clientRead()

@@ -11,6 +11,8 @@ RaceControl::~RaceControl()
     if (view) delete view;
     if (model) delete model;
     delete startButton;
+    delete serverButton;
+    delete clientButton;
     delete gridLayout;
 }
 
@@ -30,12 +32,22 @@ void RaceControl::uiSetup()
     startButton = new QPushButton("start");
     connect(startButton, SIGNAL(clicked()), this, SLOT(startButtonHandler()));
     gridLayout->addWidget(startButton);
+    startButton->hide();
+
+    // set server button
+    serverButton = new QPushButton("server");
+    connect(serverButton, SIGNAL(clicked()), this, SLOT(serverButtonHandler()));
+    gridLayout->addWidget(serverButton);
+
+    // set client button
+    clientButton = new QPushButton("client");
+    connect(clientButton, SIGNAL(clicked()), this, SLOT(clientButtonHandler()));
+    gridLayout->addWidget(clientButton);
 }
 
-void RaceControl::startButtonHandler()
+void RaceControl::initRaceView()
 {
-    // initialize race model and view
-    model = new LocalRaceModel(TRACK_LENGTH, HORSE_COUNT);
+    // initialize race view
     view = new RaceWidget(TRACK_LENGTH, HORSE_COUNT);
     gridLayout->addWidget(view);
     connect(model, SIGNAL(positionsChanged(std::vector<float>,float)),
@@ -44,10 +56,32 @@ void RaceControl::startButtonHandler()
             view, SLOT(showResults(std::vector<int>)));
     connect(model, SIGNAL(modelStopped()),
             this, SLOT(modelHandler()));
+}
 
-    // remove start button and start the race
-    gridLayout->removeWidget(startButton);
+void RaceControl::startButtonHandler()
+{
     model->startRace();
+    startButton->hide();
+}
+
+void RaceControl::serverButtonHandler()
+{
+    model = new ServerRaceModel(TRACK_LENGTH, HORSE_COUNT);
+    initRaceView();
+
+    serverButton->hide();
+    clientButton->hide();
+
+    startButton->show();
+}
+
+void RaceControl::clientButtonHandler()
+{
+    model = new ClientRaceModel(TRACK_LENGTH, HORSE_COUNT);
+    initRaceView();
+
+    serverButton->hide();
+    clientButton->hide();
 }
 
 void RaceControl::modelHandler()
@@ -56,5 +90,8 @@ void RaceControl::modelHandler()
     delete model;
     view = nullptr;
     model = nullptr;
-    gridLayout->addWidget(startButton);
+
+    serverButton->show();
+    clientButton->show();
+    startButton->hide();
 }

@@ -8,11 +8,14 @@ class RaceClient : public QObject
 {
     Q_OBJECT
 public:
-    explicit RaceClient(QObject *parent = 0);
+    explicit RaceClient(QString hostName, quint16 port, QObject *parent = 0);
     ~RaceClient();
 
+signals:
+    void msgReceived(QByteArray msg);
+
 private:
-    QTcpSocket *socket;
+    QTcpSocket *socket = nullptr;
 
 private slots:
     void socketRead();

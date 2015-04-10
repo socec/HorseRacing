@@ -11,16 +11,6 @@
 
 #include "racescene.h"
 
-// widget size is 16:9, qHD
-#define WIDGET_W (960)
-#define WIDGET_H (540)
-
-#define VIEW_W (WIDGET_W)
-#define VIEW_H (WIDGET_H)
-
-#define SLIDER_W (30)
-#define SLIDER_H (100)
-
 class RaceWidget : public QWidget
 {
     Q_OBJECT
@@ -37,6 +27,12 @@ public slots:
     void showResults(const std::vector<int>& currentResults);
 
 private:
+    // widget size is 16:9, qHD
+    const int widgetWidth = 960;
+    const int widgetHeight = 540;
+    const int sliderWidth = 30;
+    const int sliderHeight = 100;
+
     QGridLayout *gridLayout = nullptr;
     QGraphicsView *graphicsView = nullptr;
     QSlider *cameraSlider = nullptr;

@@ -2,18 +2,18 @@
 
 #include "iostream"
 
-RaceClient::RaceClient(QObject *parent) :
-    QObject(parent)
+RaceClient::RaceClient(QString hostName, quint16 port, QObject *parent)
+    : QObject(parent)
 {
     socket = new QTcpSocket(this);
-    // available data emits signal
+    // server emits signal when sending data
     connect(socket, SIGNAL(readyRead()), this, SLOT(socketRead()));
-    // error emits signal
+    // socket error emits signal
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
             this, SLOT(socketError(QAbstractSocket::SocketError)));
 
     // connect to server
-    socket->connectToHost("127.0.0.1", 4000);
+    socket->connectToHost(hostName, port);
     if (socket->waitForConnected())
         std::cerr << "Connected to server!";
     else
@@ -22,14 +22,18 @@ RaceClient::RaceClient(QObject *parent) :
 
 RaceClient::~RaceClient()
 {
-    socket->close();
-    delete socket;
+    if (socket) {
+        socket->close();
+        delete socket;
+    }
 }
 
 void RaceClient::socketRead()
 {
-    QString msg = QString::fromUtf8(socket->readAll());
-    std::cerr << "server says: " << msg.toStdString();
+    QByteArray msg = socket->readAll();
+    QString msgString = QString::fromUtf8(msg);
+    std::cerr << "server says: " << msgString.toStdString() << "\n";
+    emit msgReceived(msg);
 }
 
 void RaceClient::socketError(QAbstractSocket::SocketError)
