@@ -3,9 +3,10 @@
 #include "iostream"
 
 RaceClient::RaceClient(QString hostName, quint16 port, QObject *parent)
-    : QObject(parent)
-{
+    : QObject(parent) {
+    // initialize socket
     socket = new QTcpSocket(this);
+
     // server emits signal when sending data
     connect(socket, SIGNAL(readyRead()), this, SLOT(socketRead()));
     // socket error emits signal
@@ -20,23 +21,21 @@ RaceClient::RaceClient(QString hostName, quint16 port, QObject *parent)
         std::cerr << "socket error: " << socket->errorString().toStdString();
 }
 
-RaceClient::~RaceClient()
-{
+RaceClient::~RaceClient() {
     if (socket) {
         socket->close();
         delete socket;
+        socket = nullptr;
     }
 }
 
-void RaceClient::socketRead()
-{
+void RaceClient::socketRead() {
     QByteArray msg = socket->readAll();
     QString msgString = QString::fromUtf8(msg);
     std::cerr << "server says: " << msgString.toStdString() << "\n";
-    emit msgReceived(msg);
+    emit dataReceived(msg);
 }
 
-void RaceClient::socketError(QAbstractSocket::SocketError)
-{
+void RaceClient::socketError(QAbstractSocket::SocketError) {
     std::cerr << "socket error: " << socket->errorString().toStdString();
 }

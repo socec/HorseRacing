@@ -1,8 +1,7 @@
 #include "horseitem.h"
 
 HorseItem::HorseItem(QVector3D worldPos, QSizeF worldSize, float scale, const SpriteSheet& spriteSheet)
-    : RaceItem(worldPos, worldSize), spriteSheet(spriteSheet)
-{
+    : RaceItem(worldPos, worldSize), spriteSheet(spriteSheet) {
     // scene positioning
     setPos(worldPos.x(), worldPos.y());
     setZValue(worldPos.z());
@@ -12,15 +11,15 @@ HorseItem::HorseItem(QVector3D worldPos, QSizeF worldSize, float scale, const Sp
     spriteIndex = 0;
     // horse is initially on the starting line
     onStartingLine = true;
+    // store starting line position
+    startingPositionX = worldPos.x();
 }
 
-QRectF HorseItem::boundingRect() const
-{
+QRectF HorseItem::boundingRect() const {
     return QRectF(0, 0, worldSize.width(), worldSize.height());
 }
 
-void HorseItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
+void HorseItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     Q_UNUSED(option);
     Q_UNUSED(widget);
     // draw current sprite
@@ -30,35 +29,34 @@ void HorseItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     update(boundingRect());
 }
 
-void HorseItem::updateScenePos(const QPointF& newScenePos)
-{
+void HorseItem::updateScenePosition(const QPointF& newScenePosition) {
     // place bottom right point at requested scene postion (match position with horse head)
     QPointF offset(boundingRect().width(), boundingRect().height());
     // setting position in parent coordinates, need to use item scale on offset
-    setPos(newScenePos - offset * scale());
+    setPos(newScenePosition - offset * scale());
 }
 
-void HorseItem::updateWorldPos(const QVector3D& newWorldPos)
-{
+void HorseItem::updateWorldPosition(const QVector3D& newWorldPosition) {
     // allow only horizontal movement
-    if (newWorldPos.x() != worldPos.x()) {
+    if (newWorldPosition.x() != worldPosition.x()) {
         // when starting the race set random sprite index for variety in horse gait
         if (onStartingLine) {
-            spriteIndex = qrand() % spriteSheet.spriteCount();
+            spriteIndex = qrand() % spriteSheet.getSpriteCount();
             onStartingLine = false;
         }
         // otherwise increment sprite index with rollover
         else {
-            spriteIndex = (spriteIndex + 1) % spriteSheet.spriteCount();
+            spriteIndex = (spriteIndex + 1) % spriteSheet.getSpriteCount();
         }
         // change horse world position
-        worldPos.setX(newWorldPos.x());
+        worldPosition.setX(newWorldPosition.x());
     }
 }
 
-void HorseItem::backToStartingLine(float startingLineX)
-{
+void HorseItem::backToStartingLine() {
+    // reset sprite sheet index
     spriteIndex = 0;
+    // move back to the starting line
     onStartingLine = true;
-    worldPos.setX(startingLineX);
+    worldPosition.setX(startingPositionX);
 }

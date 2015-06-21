@@ -1,19 +1,17 @@
 #include "spritesheet.h"
 
-SpriteSheet::SpriteSheet()
-{
+SpriteSheet::SpriteSheet() {
     // load sprite sheet
     QPixmap sheet(":/images/muybridge_spritesheet.png", "PNG");
 
     // used sprite sheet has 4x4 sprites
-    sw = sheet.width() / 4;
-    sh = sheet.height() / 4;
+    spriteWidth = sheet.width() / 4;
+    spriteHeight = sheet.height() / 4;
 
-    // extract sprites
+    // extract sprites in correct order, to right then down
     for(int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++ ) {
-            // pick out sprite from the sheet
-            QPixmap sprite = sheet.copy(j*sw, i*sh, sw, sh);
+            QPixmap sprite = sheet.copy(j*spriteWidth, i*spriteHeight, spriteWidth, spriteHeight);
             sprites.append(sprite);
         }
 }

@@ -6,25 +6,23 @@
 #include <iostream>
 
 ClientRaceModel::ClientRaceModel(float trackLength, int horseCount, QObject *parent)
-    : RaceModel(trackLength, horseCount, parent), client("127.0.0.1", 4000)
-{
-    connect(&client, SIGNAL(msgReceived(QByteArray)), this, SLOT(getServerMsg(QByteArray)));
+    : RaceModel(trackLength, horseCount, parent), client("127.0.0.1", 4000) {
+    connect(&client, SIGNAL(msgReceived(QByteArray)), this, SLOT(receivePositionsMessage(QByteArray)));
 }
 
-void ClientRaceModel::startRace()
-{
+void ClientRaceModel::startRace() {
 }
 
-void ClientRaceModel::nextModelStep()
-{
+void ClientRaceModel::nextModelStep() {
+    // emit signal about changed positions
     emit positionsChanged(horsePositions, cameraPosition);
 }
 
-void ClientRaceModel::getServerMsg(QByteArray msg)
-{
+void ClientRaceModel::receivePositionsMessage(QByteArray msg) {
+    // extract camera data
     QStringList split1 = QString::fromUtf8(msg).split("C@", QString::SkipEmptyParts);
     cameraPosition = split1.at(1).toFloat();
-
+    // extract horses data
     QStringList split2 = split1.at(0).split("H@", QString::SkipEmptyParts);
     for (int i = 0; i < split2.size(); i++) {
         horsePositions.at(i) =  split2.at(i).toFloat();
@@ -32,7 +30,7 @@ void ClientRaceModel::getServerMsg(QByteArray msg)
 
     // keep calculating next steps of the model
     nextModelStep();
-    checkRaceStatus();
+    updateRaceStatus();
 
     // keep running for 3 seconds after the race is finished
     if (finished) {
@@ -40,7 +38,6 @@ void ClientRaceModel::getServerMsg(QByteArray msg)
     }
 }
 
-void ClientRaceModel::delayedStop()
-{
+void ClientRaceModel::delayedStop() {
     emit modelStopped();
 }

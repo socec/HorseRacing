@@ -6,16 +6,26 @@
 
 #include "raceitem.h"
 
-class GateItem : public QGraphicsItem, public RaceItem
-{
+/**
+ * @brief Item representing the starting gate.
+ */
+class GateItem : public QGraphicsItem, public RaceItem {
 public:
-    GateItem(QVector3D worldPos, QSizeF worldSize, float scale);
+    /**
+     * @brief Class constructor.
+     * @param worldPosition - Initial item position as a 3D coordinate in world units.
+     * @param worldSize - Initial item width and heigth in world units.
+     * @param scale - Scale if the item in the scene.
+     */
+    GateItem(QVector3D worldPosition, QSizeF worldSize, float scale);
 
+    // inherited from QGraphicsItem
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-    void updateScenePos(const QPointF& newScenePos);
-    void updateWorldPos(const QVector3D& newWorldPos);
+    // inherited from RaceItem
+    void updateScenePosition(const QPointF& newScenePosition);
+    void updateWorldPosition(const QVector3D& newWorldPosition);
 };
 
 #endif // GATEITEM_H

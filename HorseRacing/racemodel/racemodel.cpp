@@ -3,8 +3,7 @@
 #include <algorithm>
 
 RaceModel::RaceModel(float trackLength, int horseCount, QObject *parent)
-    : trackLength(trackLength)
-{
+    : trackLength(trackLength) {
     Q_UNUSED(parent);
     // initial camera position
     cameraPosition = 0.0;
@@ -14,14 +13,11 @@ RaceModel::RaceModel(float trackLength, int horseCount, QObject *parent)
     }
 }
 
-RaceModel::~RaceModel()
-{
+RaceModel::~RaceModel() {
 }
 
-void RaceModel::checkRaceStatus()
-{
+void RaceModel::updateRaceStatus() {
     if (horsePositions.empty()) return;
-
     // check if a horse crossed the finish line
     for (unsigned int i = 0; i < horsePositions.size(); i++) {
         if (horsePositions.at(i) >= trackLength)

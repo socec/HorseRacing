@@ -1,7 +1,6 @@
 #include "raceitem.h"
 
-RaceItem::RaceItem(QVector3D worldPos, QSizeF worldSize)
-{
-    this->worldPos = worldPos;
+RaceItem::RaceItem(QVector3D worldPosition, QSizeF worldSize) {
+    this->worldPosition = worldPosition;
     this->worldSize = worldSize;
 }

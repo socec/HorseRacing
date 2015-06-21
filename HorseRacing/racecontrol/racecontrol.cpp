@@ -1,13 +1,11 @@
 #include "racecontrol.h"
 
 RaceControl::RaceControl(QWidget *parent) :
-    QWidget(parent)
-{
+    QWidget(parent) {
     uiSetup();
 }
 
-RaceControl::~RaceControl()
-{
+RaceControl::~RaceControl() {
     if (view) delete view;
     if (model) delete model;
     delete startButton;
@@ -16,8 +14,7 @@ RaceControl::~RaceControl()
     delete gridLayout;
 }
 
-void RaceControl::uiSetup()
-{
+void RaceControl::uiSetup() {
     // set the main widget
     setMinimumSize(WIDGET_W, WIDGET_H);
     setMaximumSize(WIDGET_W, WIDGET_H);
@@ -45,8 +42,7 @@ void RaceControl::uiSetup()
     gridLayout->addWidget(clientButton);
 }
 
-void RaceControl::initRaceView()
-{
+void RaceControl::initRaceView() {
     // initialize race view
     view = new RaceWidget(TRACK_LENGTH, HORSE_COUNT);
     gridLayout->addWidget(view);
@@ -58,39 +54,37 @@ void RaceControl::initRaceView()
             this, SLOT(modelHandler()));
 }
 
-void RaceControl::startButtonHandler()
-{
+void RaceControl::startButtonHandler() {
     model->startRace();
     startButton->hide();
 }
 
-void RaceControl::serverButtonHandler()
-{
+void RaceControl::serverButtonHandler() {
     model = new ServerRaceModel(TRACK_LENGTH, HORSE_COUNT);
     initRaceView();
 
+    // handle buttons
     serverButton->hide();
     clientButton->hide();
-
     startButton->show();
 }
 
-void RaceControl::clientButtonHandler()
-{
+void RaceControl::clientButtonHandler() {
     model = new ClientRaceModel(TRACK_LENGTH, HORSE_COUNT);
     initRaceView();
 
+    // handle buttons
     serverButton->hide();
     clientButton->hide();
 }
 
-void RaceControl::modelHandler()
-{
+void RaceControl::modelHandler() {
     delete view;
     delete model;
     view = nullptr;
     model = nullptr;
 
+    // handle buttons
     serverButton->show();
     clientButton->show();
     startButton->hide();
