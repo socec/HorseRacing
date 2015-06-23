@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QVector>
 
 /**
  * @brief Server for race data.
@@ -32,7 +33,7 @@ public:
 
 private:
     QTcpServer *server = nullptr;
-    QTcpSocket *clientSocket = nullptr;
+    QVector<QTcpSocket*> clientSockets;
 
 private slots:
     /**
