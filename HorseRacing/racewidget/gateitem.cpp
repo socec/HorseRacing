@@ -1,20 +1,23 @@
 #include "gateitem.h"
 
-GateItem::GateItem(QVector3D worldPos, QSizeF worldSize, float scale)
-    : RaceItem(worldPos, worldSize) {
-    // scene positioning
-    setPos(worldPos.x(), worldPos.y());
-    setZValue(worldPos.z());
-    setScale(scale);
+GateItem::GateItem(QVector3D worldPos, QSizeF worldSize, float depthScale)
+    : RaceItem(worldPos, worldSize, depthScale) {
 }
 
-QRectF GateItem::boundingRect() const {
-    return QRectF(0, 0, worldSize.width(), worldSize.height());
+void GateItem::updateScenePosition(const QPointF& newScenePosition) {
+    // place bottom right point at requested scene postion (match horse positioning)
+    QPointF offset(boundingRect().width(), boundingRect().height());
+    // setting position in parent coordinates, need to use item scale on offset
+    setPos(newScenePosition - offset * scale());
 }
 
-void GateItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
+void GateItem::updateWorldPosition(const QVector3D& newWorldPosition) {
+    // does not change world position
+    Q_UNUSED(newWorldPosition);
+    return;
+}
+
+void GateItem::onPaint(QPainter *painter) {
     // separating top and bottom rectangles
     float topHeight = boundingRect().height() / 2;
     float bottomHeight = boundingRect().height() - topHeight;
@@ -30,19 +33,4 @@ void GateItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     // draw bottom rectangle with more dense pattern
     painter->setBrush(QBrush(Qt::white, Qt::Dense1Pattern));
     painter->drawRect(botRect);
-
-    update(boundingRect());
-}
-
-void GateItem::updateScenePosition(const QPointF& newScenePosition) {
-    // place bottom right point at requested scene postion (match horse positioning)
-    QPointF offset(boundingRect().width(), boundingRect().height());
-    // setting position in parent coordinates, need to use item scale on offset
-    setPos(newScenePosition - offset * scale());
-}
-
-void GateItem::updateWorldPosition(const QVector3D& newWorldPosition) {
-    // does not change world position
-    Q_UNUSED(newWorldPosition);
-    return;
 }
