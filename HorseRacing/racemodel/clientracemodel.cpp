@@ -3,11 +3,9 @@
 #include <QStringList>
 #include <QTimer>
 
-#include <iostream>
-
 ClientRaceModel::ClientRaceModel(float trackLength, int horseCount, QObject *parent)
     : RaceModel(trackLength, horseCount, parent), client("127.0.0.1", 4000) {
-    connect(&client, SIGNAL(msgReceived(QByteArray)), this, SLOT(receivePositionsMessage(QByteArray)));
+    connect(&client, SIGNAL(dataReceived(QByteArray)), this, SLOT(receivePositionsMessage(QByteArray)));
 }
 
 void ClientRaceModel::startRace() {
