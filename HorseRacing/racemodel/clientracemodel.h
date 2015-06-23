@@ -1,8 +1,12 @@
 #ifndef CLIENTRACEMODEL_H
 #define CLIENTRACEMODEL_H
 
+#include <QStringList>
+#include <QTimer>
+
 #include "racemodel.h"
 #include "network/raceclient.h"
+#include "network/racemessage.h"
 
 /**
  * @brief Client side race model.
@@ -36,9 +40,9 @@ private:
 private slots:
     /**
      * @brief Handles received message with updated horse and camera positions.
-     * @param msg - Message received from server.
+     * @param message - Message received from server.
      */
-    void receivePositionsMessage(QByteArray msg);
+    void receivePositionsMessage(QByteArray message);
 
     /**
      * @brief Stops the model.

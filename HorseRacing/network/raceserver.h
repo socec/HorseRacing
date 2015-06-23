@@ -28,7 +28,7 @@ public:
      * @brief Sends data to connected clients.
      * @param data - Data to send.
      */
-    void sendDataToClients(const char *data);
+    void sendDataToClients(const QByteArray data);
 
 private:
     QTcpServer *server = nullptr;

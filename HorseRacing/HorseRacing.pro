@@ -26,6 +26,7 @@ SOURCES += main.cpp\
     racecontrol/racecontrol.cpp \
     network/raceserver.cpp \
     network/raceclient.cpp \
+    network/racemessage.cpp \
     racemodel/racemodel.cpp \
     racemodel/serverracemodel.cpp \
     racemodel/clientracemodel.cpp
@@ -41,6 +42,7 @@ HEADERS  += \
     racecontrol/racecontrol.h \
     network/raceserver.h \
     network/raceclient.h \
+    network/racemessage.h \
     racemodel/racemodel.h \
     racemodel/serverracemodel.h \
     racemodel/clientracemodel.h

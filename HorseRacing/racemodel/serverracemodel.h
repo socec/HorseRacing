@@ -5,6 +5,7 @@
 
 #include "racemodel.h"
 #include "network/raceserver.h"
+#include "network/racemessage.h"
 
 #define BASE_SPEED (5.0)
 #define FPS (25)
@@ -42,12 +43,6 @@ private:
      * @brief Advances the horses at random speed and camera at constant speed.
      */
     void nextModelStep();
-
-    /**
-     * @brief Creates a message for clients with updated horse and camera positions.
-     * @return Message with updated positions.
-     */
-    QByteArray createPositionsMessage();
 
 private slots:
     /**

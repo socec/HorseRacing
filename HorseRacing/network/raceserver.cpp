@@ -30,7 +30,7 @@ RaceServer::~RaceServer() {
     }
 }
 
-void RaceServer::sendDataToClients(const char *data) {
+void RaceServer::sendDataToClients(const QByteArray data) {
     if (!clientSocket) return;
     if (clientSocket->state() == QAbstractSocket::UnconnectedState) return;
 

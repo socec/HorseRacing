@@ -24,18 +24,7 @@ void ServerRaceModel::nextModelStep() {
     emit positionsChanged(horsePositions, cameraPosition);
 
     // notify clients about changed positions
-    server.sendDataToClients(createPositionsMessage());
-}
-
-QByteArray ServerRaceModel::createPositionsMessage() {
-    QByteArray msg;
-    // pack horse data
-    for (unsigned int i = 0; i < horsePositions.size(); i++) {
-        msg.append("H@" + QString::number((double) horsePositions.at(i), 'f', 2));
-    }
-    // pack camera data
-    msg.append("C@" + QString::number((double) cameraPosition, 'f', 2));
-    return msg;
+    server.sendDataToClients(RaceMessage::createPositions(horsePositions, cameraPosition));
 }
 
 void ServerRaceModel::timerHandler() {
