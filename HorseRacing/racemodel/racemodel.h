@@ -2,8 +2,11 @@
 #define RACEMODEL_H
 
 #include <QObject>
+#include <QVector>
+#include <QTimer>
 
-#include <vector>
+#define FPS (25)
+#define FINISH_DELAY (3000)
 
 /**
  * @brief Base class for modeling a race.
@@ -11,23 +14,19 @@
  * Race model is responsible for updating horse and camera positions,
  * providing race results and signaling the start and finish of the race.
  */
-class RaceModel : public QObject {
+class RaceModel : public QObject
+{
     // using signals and slots
     Q_OBJECT
 
 public:
     /**
-     * @brief Class constructor.
+     * @brief Constructor with initial parameters.
      * @param trackLength - Length of the race track.
      * @param horseCount - Number of horses in the race.
      * @param parent - Parent object used for hierarchy.
      */
     explicit RaceModel(float trackLength, int horseCount, QObject *parent = 0);
-
-    /**
-     * @brief Class destructor.
-     */
-    virtual ~RaceModel();
 
     /**
      * @brief Returns length of the race track.
@@ -37,9 +36,9 @@ public:
 
     /**
      * @brief Returns current horse positions.
-     * @return Vector with position of each horse.
+     * @return Vector holding the current position of each horse.
      */
-    std::vector<float> getHorsePositions() const { return horsePositions; }
+    QVector<float> getHorsePositions() const { return horsePositions; }
 
     /**
      * @brief Returns current camera position.
@@ -48,18 +47,17 @@ public:
     float getCameraPosition() const { return cameraPosition; }
 
     /**
-     * @brief Returns current race results.
-     *        Updated as horses cross the finish line.
-     * @return Vector of horse track indexes sorted by final race position.
+     * @brief Returns current race results in a form of sorted lane numbers.
+     *        Updated as each horse crosses the finish line.
+     * @return Vector of lane numbers sorted by final race position.
      */
-    std::vector<int> getResults() const { return results; }
+    QVector<int> getResults() const { return results; }
 
 public slots:
     /**
      * @brief Starts the race model.
-     *        Specific implementation needs to be provided by a subclass.
      */
-    virtual void startRace() = 0;
+    void startRace();
 
 signals:
     /**
@@ -67,16 +65,17 @@ signals:
      * @param horsePositions - Updated horse positions.
      * @param cameraPosition- Updated camera position.
      */
-    void positionsChanged(const std::vector<float>& horsePositions, const float& cameraPosition);
+    void positionsChanged(const QVector<float>& horsePositions, const float& cameraPosition);
 
     /**
      * @brief Race results are available to display.
      * @param currentResults - Current race results.
      */
-    void resultsAvailable(const std::vector<int>& currentResults);
+    void resultsAvailable(const QVector<int>& currentResults);
 
     /**
-     * @brief The model finished the race.
+     * @brief The race running on this model is finished.
+     *        The model will keep runnning for some time to avoid sudden stop.
      */
     void raceFinished();
 
@@ -86,11 +85,24 @@ signals:
     void modelStopped();
 
 protected:
+    // race essentials
     float trackLength;
-    std::vector<float> horsePositions;
+    QVector<float> horsePositions;
     float cameraPosition;
-    std::vector<int> results;
+    QVector<int> results;
+
+    // flag available to subclasses
     bool finished = false;
+
+    // timing
+    QTimer timer;
+    struct
+    {
+        // update interval of the model, frames per second used in animation
+        int fps = FPS;
+        // miliseconds to keep the model running after the race is finished
+        float finishDelay = FINISH_DELAY;
+    } timing;
 
     /**
      * @brief Updates the race status and emits signals for special events.
@@ -99,10 +111,21 @@ protected:
 
     /**
      * @brief Calculates horse and camera positions for the next step in the model.
-     *        Should be called at regular intervals to allow race animation.
+     *        Called at regular intervals to allow race animation.
      *        Specific implementation needs to be provided by a subclass.
      */
     virtual void nextModelStep() = 0;
+
+private slots:
+    /**
+     * @brief Advances the model on timer tick.
+     */
+    void timerHandler();
+
+    /**
+     * @brief Stops the race model.
+     */
+    void stopRace();
 };
 
 #endif // RACEMODEL_H

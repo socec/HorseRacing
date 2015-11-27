@@ -11,22 +11,28 @@
  *
  * Items are meant to be displayed in 2.5D perspective,
  * so they use 3D world position and 2D size.
+ *
+ * Item world coordinate defines the top left point of the item.
+ * Item size grows from left to right, top to bottom:
+ *
+ * (0,0)----(w,0)
+ *   |        |
+ * (0,h)----(w,h)
  */
-class RaceItem : public QGraphicsItem {
+class RaceItem : public QGraphicsItem
+{
 public:
     /**
-     * @brief Class constructor.
-     * @param worldPosition - Initial item position as a 3D coordinate in world units.
-     * @param worldSize - Initial item width and heigth in world units.
-     * @param depthScale - Projection scaling factor based on scene depth.
+     * @brief Default constructor.
      */
-    RaceItem(QVector3D worldPosition, QSizeF worldSize, float depthScale);
+    RaceItem();
 
     /**
-     * @brief Returns the current world position of the item.
-     * @return 3D coordinate of the item's world position.
+     * @brief Constructor with initial parameters.
+     * @param worldPosition - Initial item position as a 3D coordinate in world units.
+     * @param worldSize - Initial item width and heigth in world units.
      */
-    QVector3D getWorldPosition() const { return worldPosition; }
+    RaceItem(QVector3D worldPosition, QSizeF worldSize);
 
     /**
      * @brief Returns the item size.
@@ -35,18 +41,30 @@ public:
     QSizeF getWorldSize() const { return worldSize; }
 
     /**
-     * @brief Updates the item's position in the scene.
-     *        Specific implementation needs to be provided by a subclass.
-     * @param newScenePosition - New item position in the scene.
+     * @brief Sets the item size.
+     * @param worldSize - Item size in world units.
      */
-    virtual void updateScenePosition(const QPointF& newScenePosition) = 0;
+    void setWorldSize(const QSizeF& worldSize) { this->worldSize = worldSize; }
 
     /**
-     * @brief Updates the item's world position.
-     *        Specific implementation needs to be provided by a subclass.
-     * @param newWorldPosition - 3D coordinate of the new item world position.
+     * @brief Returns the current world position of the item.
+     * @return 3D coordinate of the item's world position.
      */
-    virtual void updateWorldPosition(const QVector3D& newWorldPosition) = 0;
+    QVector3D getWorldPosition() const { return worldPosition; }
+
+    /**
+     * @brief Sets the current world position of the item.
+     * @param worldPosition - 3D coordinate of the item's world position.
+     */
+    void setWorldPosition(const QVector3D& worldPosition);
+
+    /**
+     * @brief Sets the current scene position of the item while handling visual details.
+     *        Called by race animation framework after calculating the item's projected position.
+     *        Specific implementation needs to be provided by a subclass.
+     * @param scenePosition - New item position in the scene.
+     */
+    virtual void setScenePosition(const QPointF& scenePosition) = 0;
 
     // inherited from QGraphicsItem
     QRectF boundingRect() const;
@@ -55,7 +73,6 @@ public:
 protected:
     QVector3D worldPosition;
     QSizeF worldSize;
-    float depthScale;
 
     /**
      * @brief Handles details of painting this item.

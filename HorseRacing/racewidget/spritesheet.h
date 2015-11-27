@@ -7,7 +7,8 @@
 /**
  * @brief Sprite sheet used in horse animation.
  */
-class SpriteSheet {
+class SpriteSheet
+{
 public:
     /**
      * @brief Class constructor.

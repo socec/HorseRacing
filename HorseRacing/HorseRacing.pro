@@ -11,7 +11,7 @@ QMAKE_CXXFLAGS += -std=c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = HorseRacing
+TARGET = HorseRacing.run
 TEMPLATE = app
 
 
@@ -28,8 +28,8 @@ SOURCES += main.cpp\
     network/raceclient.cpp \
     network/racemessage.cpp \
     racemodel/racemodel.cpp \
-    racemodel/serverracemodel.cpp \
-    racemodel/clientracemodel.cpp
+    racemodel/servermodel.cpp \
+    racemodel/clientmodel.cpp
 
 HEADERS  += \
     racewidget/fenceitem.h \
@@ -44,8 +44,8 @@ HEADERS  += \
     network/raceclient.h \
     network/racemessage.h \
     racemodel/racemodel.h \
-    racemodel/serverracemodel.h \
-    racemodel/clientracemodel.h
+    racemodel/servermodel.h \
+    racemodel/clientmodel.h
 
 RESOURCES += \
     images.qrc

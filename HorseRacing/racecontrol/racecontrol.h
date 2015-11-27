@@ -1,51 +1,50 @@
 #ifndef RACECONTROL_H
 #define RACECONTROL_H
 
-#include <QtCore>
-#include <QtGui>
 #include <QWidget>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QSharedPointer>
 
 #include "racewidget/racewidget.h"
-#include "racemodel/serverracemodel.h"
-#include "racemodel/clientracemodel.h"
+#include "racemodel/servermodel.h"
+#include "racemodel/clientmodel.h"
 
+// race parameters
 #define TRACK_LENGTH (1000.0)
 #define HORSE_COUNT (5)
 // widget size is 16:9, qHD
-#define WIDGET_W (960)
-#define WIDGET_H (540)
+#define WIDGET_WIDTH (960)
+#define WIDGET_HEIGHT (540)
+// button size
+#define BUTTON_WIDTH (100)
+#define BUTTON_HEIGHT (30)
 
 /**
  * @brief Race controller responsible for connecting the race model with
  *        race view and handling user input.
  */
-class RaceControl : public QWidget {
+class RaceControl : public QWidget
+{
     // using signals and slots
     Q_OBJECT
 
 public:
     /**
-     * @brief Class constructor.
+     * @brief Default constructor.
      * @param parent - Parent object used for hierarchy.
      */
     explicit RaceControl(QWidget *parent = 0);
 
-    /**
-     * @brief Class destructor.
-     */
-    ~RaceControl();
-
 private:
     // UI elements
-    QGridLayout *gridLayout = nullptr;
-    QPushButton *startButton = nullptr;
-    QPushButton *serverButton = nullptr;
-    QPushButton *clientButton = nullptr;
+    QGridLayout gridLayout;
+    QPushButton startButton;
+    QPushButton serverButton;
+    QPushButton clientButton;
     // model and view
-    RaceModel *model = nullptr;
-    RaceWidget *view = nullptr;
+    QSharedPointer<RaceModel> model;
+    QSharedPointer<RaceWidget> view;
 
     /**
      * @brief Sets up the UI.

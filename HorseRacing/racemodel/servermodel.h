@@ -1,64 +1,42 @@
-#ifndef SERVERRACEMODEL_H
-#define SERVERRACEMODEL_H
-
-#include <QTimer>
+#ifndef SERVERMODEL_H
+#define SERVERMODEL_H
 
 #include "racemodel.h"
 #include "network/raceserver.h"
 #include "network/racemessage.h"
 
 #define BASE_SPEED (5.0)
-#define FPS (25)
 
 /**
  * @brief Server side race model.
  */
-class ServerRaceModel : public RaceModel {
+class ServerModel : public RaceModel
+{
     // using signals and slots
     Q_OBJECT
 
 public:
     /**
-     * @brief Class constructor.
+     * @brief Constructor with initial parameters.
      * @param trackLength - Length of the race track.
      * @param horseCount - Number of horses in the race.
      * @param parent - Parent object used for hierarchy.
      */
-    ServerRaceModel(float trackLength, int horseCount, QObject *parent = 0);
-
-    // inherited from RaceModel
-    void startRace();
+    ServerModel(float trackLength, int horseCount, QObject *parent = 0);
 
 private:
     // communication server
     RaceServer server;
 
-    // timing
+    // base speed in world coordinates per second
     float baseSpeed = BASE_SPEED;
-    QTimer timer;
-    int fps = FPS;
 
     // inherited from RaceModel
     /**
      * @brief Advances the horses at random speed and camera at constant speed.
+     *        Notifies connected clients about the updates.
      */
     void nextModelStep();
-
-private slots:
-    /**
-     * @brief Advances the model on timer tick.
-     */
-    void timerHandler();
-
-    /**
-     * @brief Starts the model.
-     */
-    void delayedStart();
-
-    /**
-     * @brief Stops the model.
-     */
-    void delayedStop();
 };
 
-#endif // SERVERRACEMODEL_H
+#endif // SERVERMODEL_H

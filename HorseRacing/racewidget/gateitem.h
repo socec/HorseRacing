@@ -6,20 +6,29 @@
 /**
  * @brief Item representing the starting gate.
  */
-class GateItem : public RaceItem {
+class GateItem : public RaceItem
+{
 public:
     /**
-     * @brief Class constructor.
+     * @brief Default constructor.
+     */
+    GateItem();
+
+    /**
+     * @brief Constructor with initial parameters.
      * @param worldPosition - Initial item position as a 3D coordinate in world units.
      * @param worldSize - Initial item width and heigth in world units.
-     * @param depthScale - Projection scaling factor based on scene depth.
      */
-    GateItem(QVector3D worldPosition, QSizeF worldSize, float depthScale);
+    GateItem(QVector3D worldPosition, QSizeF worldSize);
 
     // inherited from RaceItem
-    void updateScenePosition(const QPointF& newScenePosition);
-    void updateWorldPosition(const QVector3D& newWorldPosition);
+    void setScenePosition(const QPointF& scenePosition);
     void onPaint(QPainter *painter);
+
+private:
+    // separating top and bottom rectangles with different structure
+    float topHeight, bottomHeight;
+    QRectF topRect, bottomRect;
 };
 
 #endif // GATEITEM_H

@@ -5,25 +5,21 @@
 #include <QTcpSocket>
 
 /**
- * @brief Client for race data.
+ * @brief Client for race data exchange.
  */
-class RaceClient : public QObject {
+class RaceClient : public QObject
+{
     // using signals and slots
     Q_OBJECT
 
 public:
     /**
-     * @brief Class constructor.
+     * @brief Constructor with initial parameters.
      * @param hostName - Server host name.
      * @param port - Server port number.
      * @param parent - Parent object used for hierarchy.
      */
     explicit RaceClient(QString hostName, quint16 port, QObject *parent = 0);
-
-    /**
-     * @brief Class destructor.
-     */
-    ~RaceClient();
 
 signals:
     /**
@@ -33,18 +29,13 @@ signals:
     void dataReceived(QByteArray data);
 
 private:
-    QTcpSocket *socket = nullptr;
+    QTcpSocket socket;
 
 private slots:
     /**
-     * @brief Reads data received on the socket.
+     * @brief Handles notifications about incoming data from server.
      */
-    void socketRead();
-
-    /**
-     * @brief Handles socket error.
-     */
-    void socketError(QAbstractSocket::SocketError);
+    void incomingDataHandler();
 };
 
 #endif // RACECLIENT_H

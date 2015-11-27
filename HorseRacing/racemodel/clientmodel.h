@@ -1,8 +1,7 @@
-#ifndef CLIENTRACEMODEL_H
-#define CLIENTRACEMODEL_H
+#ifndef CLIENTMODEL_H
+#define CLIENTMODEL_H
 
-#include <QStringList>
-#include <QTimer>
+#include <QQueue>
 
 #include "racemodel.h"
 #include "network/raceclient.h"
@@ -11,25 +10,24 @@
 /**
  * @brief Client side race model.
  */
-class ClientRaceModel : public RaceModel {
+class ClientModel : public RaceModel
+{
     // using signals and slots
     Q_OBJECT
 
 public:
     /**
-     * @brief Class constructor.
+     * @brief Constructor with initial parameters.
      * @param trackLength - Length of the race track.
      * @param horseCount - Number of horses in the race.
      * @param parent - Parent object used for hierarchy.
      */
-    ClientRaceModel(float trackLength, int horseCount, QObject *parent = 0);
-
-    // inherited from RaceModel
-    void startRace();
+    ClientModel(float trackLength, int horseCount, QObject *parent = 0);
 
 private:
     // communication client
     RaceClient client;
+    QQueue<QByteArray> messageQueue;
 
     // inherited from RaceModel
     /**
@@ -39,15 +37,10 @@ private:
 
 private slots:
     /**
-     * @brief Handles received message with updated horse and camera positions.
+     * @brief Handles message with updated horse and camera positions.
      * @param message - Message received from server.
      */
     void receivePositionsMessage(QByteArray message);
-
-    /**
-     * @brief Stops the model.
-     */
-    void delayedStop();
 };
 
-#endif // CLIENTRACEMODEL_H
+#endif // CLIENTMODEL_H

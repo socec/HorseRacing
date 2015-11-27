@@ -7,32 +7,36 @@
 /**
  * @brief Item representing a race horse.
  */
-class HorseItem : public RaceItem {
+class HorseItem : public RaceItem
+{
 public:
     /**
-     * @brief Class constructor.
-     * @param worldPosition - Initial item position as a 3D coordinate in world units.
-     * @param worldSize - Initial item width and heigth in world units.
-     * @param depthScale - Projection scaling factor based on scene depth.
-     * @param spriteSheet - Sprite sheet used for horse animation.
+     * @brief Default constructor.
      */
-    HorseItem(QVector3D worldPosition, QSizeF worldSize, float depthScale, const SpriteSheet& spriteSheet);
+    HorseItem();
 
     /**
-     * @brief Positions the horse back on the starting line.
+     * @brief Constructor with initial parameters.
+     * @param worldPosition - Initial item position as a 3D coordinate in world units.
+     * @param worldSize - Initial item width and heigth in world units.
      */
-    void backToStartingLine();
+    HorseItem(QVector3D worldPosition, QSizeF worldSize);
+
+    /**
+     * @brief Updates current sprite for the horse.
+     *        Should be called when world position is changed to provide animation.
+     * @param spriteSheet - Sprite sheet used for horse animation.
+     */
+    void updateSprite(const SpriteSheet& spriteSheet);
 
     // inherited from RaceItem
-    void updateScenePosition(const QPointF& newScenePosition);
-    void updateWorldPosition(const QVector3D& newWorldPosition);
+    void setScenePosition(const QPointF& scenePosition);
     void onPaint(QPainter *painter);
 
 private:
-    const SpriteSheet& spriteSheet;
+    QPixmap sprite;
     int spriteIndex;
     bool onStartingLine;
-    float startingPositionX;
 };
 
 #endif // HORSEITEM_H

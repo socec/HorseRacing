@@ -1,91 +1,96 @@
 #include "racecontrol.h"
 
-RaceControl::RaceControl(QWidget *parent) :
-    QWidget(parent) {
+RaceControl::RaceControl(QWidget *parent)
+    : QWidget(parent),
+      gridLayout(this),
+      startButton(this),
+      serverButton(this),
+      clientButton(this)
+{
     uiSetup();
 }
 
-RaceControl::~RaceControl() {
-    if (view) delete view;
-    if (model) delete model;
-    delete startButton;
-    delete serverButton;
-    delete clientButton;
-    delete gridLayout;
-}
-
-void RaceControl::uiSetup() {
+void RaceControl::uiSetup()
+{
     // set the main widget
-    setMinimumSize(WIDGET_W, WIDGET_H);
-    setMaximumSize(WIDGET_W, WIDGET_H);
-    setGeometry(0, 0, WIDGET_W, WIDGET_H);
+    setMinimumSize(WIDGET_WIDTH, WIDGET_HEIGHT + BUTTON_HEIGHT);
+    //setMaximumSize(WIDGET_WIDTH, WIDGET_HEIGHT);
 
     // set grid layout
-    gridLayout = new QGridLayout(this);
-    gridLayout->setContentsMargins(0, 0, 0, 0);
-    setLayout(gridLayout);
+    gridLayout.setContentsMargins(0, 0, 0, 0);
+    setLayout(&gridLayout);
 
     // set start button
-    startButton = new QPushButton("start");
-    connect(startButton, SIGNAL(clicked()), this, SLOT(startButtonHandler()));
-    gridLayout->addWidget(startButton);
-    startButton->hide();
+    startButton.setText("start");
+    startButton.setMinimumSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+    startButton.setMaximumSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+    connect(&startButton, SIGNAL(clicked()), this, SLOT(startButtonHandler()));
+    gridLayout.addWidget(&startButton, 1, 1);
+    startButton.hide();
 
     // set server button
-    serverButton = new QPushButton("server");
-    connect(serverButton, SIGNAL(clicked()), this, SLOT(serverButtonHandler()));
-    gridLayout->addWidget(serverButton);
+    serverButton.setText("server");
+    serverButton.setMinimumSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+    serverButton.setMaximumSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+    connect(&serverButton, SIGNAL(clicked()), this, SLOT(serverButtonHandler()));
+    gridLayout.addWidget(&serverButton, 1, 1);
 
     // set client button
-    clientButton = new QPushButton("client");
-    connect(clientButton, SIGNAL(clicked()), this, SLOT(clientButtonHandler()));
-    gridLayout->addWidget(clientButton);
+    clientButton.setText("client");
+    clientButton.setMinimumSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+    clientButton.setMaximumSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+    connect(&clientButton, SIGNAL(clicked()), this, SLOT(clientButtonHandler()));
+    gridLayout.addWidget(&clientButton, 1, 2);
 }
 
-void RaceControl::initRaceView() {
+void RaceControl::initRaceView()
+{
     // initialize race view
-    view = new RaceWidget(TRACK_LENGTH, HORSE_COUNT);
-    gridLayout->addWidget(view);
-    connect(model, SIGNAL(positionsChanged(std::vector<float>,float)),
-            view, SLOT(updatePositions(std::vector<float>,float)));
-    connect(model, SIGNAL(resultsAvailable(std::vector<int>)),
-            view, SLOT(showResults(std::vector<int>)));
-    connect(model, SIGNAL(modelStopped()),
+    view = QSharedPointer<RaceWidget>(new RaceWidget(TRACK_LENGTH, HORSE_COUNT));
+    gridLayout.addWidget(view.data(), 2, 1);
+    connect(model.data(), SIGNAL(positionsChanged(QVector<float>,float)),
+            view.data(), SLOT(updatePositions(QVector<float>,float)));
+    connect(model.data(), SIGNAL(resultsAvailable(QVector<int>)),
+            view.data(), SLOT(showResults(QVector<int>)));
+    connect(model.data(), SIGNAL(modelStopped()),
             this, SLOT(modelHandler()));
 }
 
-void RaceControl::startButtonHandler() {
+void RaceControl::startButtonHandler()
+{
     model->startRace();
-    startButton->hide();
+    startButton.hide();
 }
 
-void RaceControl::serverButtonHandler() {
-    model = new ServerRaceModel(TRACK_LENGTH, HORSE_COUNT);
+void RaceControl::serverButtonHandler()
+{
+    model = QSharedPointer<RaceModel>(new ServerModel(TRACK_LENGTH, HORSE_COUNT));
     initRaceView();
 
     // handle buttons
-    serverButton->hide();
-    clientButton->hide();
-    startButton->show();
+    serverButton.hide();
+    clientButton.hide();
+    startButton.show();
 }
 
-void RaceControl::clientButtonHandler() {
-    model = new ClientRaceModel(TRACK_LENGTH, HORSE_COUNT);
+void RaceControl::clientButtonHandler()
+{
+    model = QSharedPointer<RaceModel>(new ClientModel(TRACK_LENGTH, HORSE_COUNT));
     initRaceView();
+    model->startRace();
 
     // handle buttons
-    serverButton->hide();
-    clientButton->hide();
+    serverButton.hide();
+    clientButton.hide();
 }
 
-void RaceControl::modelHandler() {
-    delete view;
-    delete model;
-    view = nullptr;
-    model = nullptr;
+void RaceControl::modelHandler()
+{
+    view.clear();
+    model.clear();
 
     // handle buttons
-    serverButton->show();
-    clientButton->show();
-    startButton->hide();
+    serverButton.show();
+    clientButton.show();
+    startButton.hide();
 }
