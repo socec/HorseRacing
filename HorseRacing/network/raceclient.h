@@ -2,6 +2,7 @@
 #define RACECLIENT_H
 
 #include <QObject>
+#include <QUdpSocket>
 #include <QTcpSocket>
 
 /**
@@ -21,17 +22,36 @@ public:
      */
     explicit RaceClient(QString hostName, quint16 port, QObject *parent = 0);
 
+    /**
+     * @brief Sends data to server.
+     * @param data - Byte array of data to send.
+     */
+    void sendDataToServer(const QByteArray& data);
+
 signals:
     /**
-     * @brief Data was received from the server.
-     * @param data - Received data.
+     * @brief Datagram was received from the server.
+     * @param data - Received datagram.
      */
-    void dataReceived(QByteArray data);
+    void datagramReceived(QByteArray datagram);
 
 private:
-    QTcpSocket socket;
+    QUdpSocket multicastSocket;
+    QTcpSocket tcpSocket;
+
+    /**
+     * @brief Configures multicast connection to receive datagrams from server.
+     * @param multicastAddress - Address used for receiving multicast data.
+     * @param multicastPort - Port used for receiving multicast data.
+     */
+    void configureMulticast(QString multicastAddress, quint16 multicastPort);
 
 private slots:
+    /**
+     * @brief Handles multicast datagrams from server.
+     */
+    void datagramHandler();
+
     /**
      * @brief Handles notifications about incoming data from server.
      */

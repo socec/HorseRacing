@@ -2,18 +2,27 @@
 
 #include <QDebug>
 
-RaceServer::RaceServer(quint16 port, QObject *parent)
+RaceServer::RaceServer(QString multicastAddress, quint16 multicastPort, quint16 tcpPort, QObject *parent)
     : QObject(parent),
-      server(this)
+      multicastSocket(this),
+      multicastAddress(QHostAddress(multicastAddress)),
+      multicastPort(multicastPort),
+      tcpServer(this)
 {
     // new client connections emit signal
-    connect(&server, SIGNAL(newConnection()), this, SLOT(newConnectionHandler()));
+    connect(&tcpServer, SIGNAL(newConnection()), this, SLOT(newConnectionHandler()));
 
     // start the server
-    if (server.listen(QHostAddress::Any, port) == false)
+    if (tcpServer.listen(QHostAddress::Any, tcpPort) == false)
     {
-        qDebug() << "Server could not start: " << server.errorString();
+        qDebug() << "Server could not start: " << tcpServer.errorString();
     }
+}
+
+void RaceServer::sendMulticastData(const QByteArray& data)
+{
+    multicastSocket.writeDatagram(data, multicastAddress, multicastPort);
+    multicastSocket.flush();
 }
 
 void RaceServer::sendDataToClient(const unsigned int id, const QByteArray& data)
@@ -28,15 +37,6 @@ void RaceServer::sendDataToClient(const unsigned int id, const QByteArray& data)
     {
         clients.at(id)->write(data);
         clients.at(id)->flush();
-        clients.at(id)->waitForBytesWritten();
-    }
-}
-
-void RaceServer::sendDataToAllClients(const QByteArray& data)
-{
-    for (int i = 0; i < clients.size(); i++)
-    {
-        sendDataToClient(i, data);
     }
 }
 
@@ -61,7 +61,7 @@ QByteArray RaceServer::readDataFromClient(const unsigned int id)
 void RaceServer::newConnectionHandler()
 {
     // add new socket to the client list
-    QSharedPointer<QTcpSocket> client(server.nextPendingConnection());
+    QSharedPointer<QTcpSocket> client(tcpServer.nextPendingConnection());
     clients.append(client);
     // clients emit signal when they have data ready to read
     connect(clients.last().data(), SIGNAL(readyRead()), this, SLOT(incomingDataHandler()));

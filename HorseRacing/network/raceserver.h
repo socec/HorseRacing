@@ -2,6 +2,7 @@
 #define RACESERVER_H
 
 #include <QObject>
+#include <QUdpSocket>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QVector>
@@ -18,16 +19,37 @@ class RaceServer : public QObject
 public:
     /**
      * @brief Constructor with initial parameters.
+     * @param multicastAddress - Address used for sending multicast data.
+     * @param multicastPort - Port used for sending multicast data.
      * @param port - TCP port for incoming client connections.
      * @param parent - Parent object used for hierarchy.
      */
-    explicit RaceServer(quint16 port, QObject *parent = 0);
+    explicit RaceServer(QString multicastAddress, quint16 multicastPort, quint16 tcpPort,
+                        QObject *parent = 0);
+
+    /**
+     * @brief Returns multicast address of the server.
+     * @return String representation of multicast address.
+     */
+    QString getMulticastAddress() { return multicastAddress.toString(); }
+
+    /**
+     * @brief Returns multicast port of the server.
+     * @return Multicast port.
+     */
+    quint16 getMulticastPort() { return multicastPort; }
+
+    /**
+     * @brief Sends data to all clients listening.
+     * @param data - Byte array of data to send.
+     */
+    void sendMulticastData(const QByteArray& data);
 
     /**
      * @brief Returns TCP port of the server.
      * @return TCP port of the server if server is listening for connections, 0 otherwise.
      */
-    unsigned int getPort() { return server.serverPort(); }
+    unsigned int getTcpPort() { return tcpServer.serverPort(); }
 
     /**
      * @brief Sends data to a connected client.
@@ -35,12 +57,6 @@ public:
      * @param data - Byte array of data to send.
      */
     void sendDataToClient(const unsigned int id, const QByteArray& data);
-
-    /**
-     * @brief Sends data to all connected clients.
-     * @param data - Byte array of data to send.
-     */
-    void sendDataToAllClients(const QByteArray& data);
 
     /**
      * @brief Returns IDs of connected clients with incoming data to read.
@@ -62,7 +78,10 @@ signals:
     void incomingClientData();
 
 private:
-    QTcpServer server;
+    QUdpSocket multicastSocket;
+    QHostAddress multicastAddress;
+    quint16 multicastPort;
+    QTcpServer tcpServer;
     QVector<QSharedPointer<QTcpSocket>> clients;
 
 private slots:

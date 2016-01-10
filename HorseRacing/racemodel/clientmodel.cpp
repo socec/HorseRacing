@@ -5,7 +5,7 @@ ClientModel::ClientModel(float trackLength, int horseCount, QObject *parent)
       client("127.0.0.1", 4000)
 {
     // set network communication
-    connect(&client, SIGNAL(dataReceived(QByteArray)),
+    connect(&client, SIGNAL(datagramReceived(QByteArray)),
             this, SLOT(receivePositionsMessage(QByteArray)));
 }
 

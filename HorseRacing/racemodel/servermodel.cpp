@@ -2,7 +2,7 @@
 
 ServerModel::ServerModel(float trackLength, int horseCount, QObject *parent)
     : RaceModel(trackLength, horseCount, parent),
-      server(4000)
+      server("239.255.13.37", 51337, 4000)
 {
     // nothing to do
 }
@@ -21,5 +21,5 @@ void ServerModel::nextModelStep()
 
     // notify clients about changed positions
     QByteArray positionsMessage = RaceMessage::createPositions(horsePositions, cameraPosition);
-    server.sendDataToAllClients(positionsMessage);
+    server.sendMulticastData(positionsMessage);
 }
