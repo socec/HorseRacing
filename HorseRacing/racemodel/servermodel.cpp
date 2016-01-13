@@ -4,7 +4,8 @@ ServerModel::ServerModel(float trackLength, int horseCount, QObject *parent)
     : RaceModel(trackLength, horseCount, parent),
       server("239.255.13.37", 51337, 4000)
 {
-    // nothing to do
+    // listen to client messages
+    connect(&server, SIGNAL(pendingClientData(uint)), this, SLOT(receiveRequest(uint)));
 }
 
 void ServerModel::nextModelStep()
@@ -22,4 +23,11 @@ void ServerModel::nextModelStep()
     // notify clients about changed positions
     QByteArray positionsMessage = RaceMessage::createPositions(horsePositions, cameraPosition);
     server.sendMulticastData(positionsMessage);
+}
+
+void ServerModel::receiveRequest(uint id)
+{
+    QByteArray request = server.readDataFromClient(id);
+    qDebug() << "Client " << id << " wants: " << request;
+    server.sendDataToClient(id, request.append(" to " + QString::number(id)));
 }

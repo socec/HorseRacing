@@ -49,33 +49,28 @@ public:
      * @brief Returns TCP port of the server.
      * @return TCP port of the server if server is listening for connections, 0 otherwise.
      */
-    unsigned int getTcpPort() { return tcpServer.serverPort(); }
+    quint16 getTcpPort() { return tcpServer.serverPort(); }
 
     /**
      * @brief Sends data to a connected client.
      * @param id - ID of the connected client.
      * @param data - Byte array of data to send.
      */
-    void sendDataToClient(const unsigned int id, const QByteArray& data);
-
-    /**
-     * @brief Returns IDs of connected clients with incoming data to read.
-     * @return Vector of client IDs with available data to read.
-     */
-     QVector<unsigned int> clientsWithIncomingData();
+    void sendDataToClient(const uint id, const QByteArray& data);
 
     /**
      * @brief Reads data from a connected client.
      * @param id - ID of the connected client.
      * @return Byte array of data from the client.
      */
-    QByteArray readDataFromClient(const unsigned int id);
+    QByteArray readDataFromClient(const uint id);
 
 signals:
     /**
-     * @brief There is incoming data to read from connected clients.
+     * @brief There is pending data to read from a connected client.
+     * @param id - ID of the connected client with pending data.
      */
-    void incomingClientData();
+    void pendingClientData(uint id);
 
 private:
     QUdpSocket multicastSocket;
@@ -84,6 +79,13 @@ private:
     QTcpServer tcpServer;
     QVector<QSharedPointer<QTcpSocket>> clients;
 
+    /**
+     * @brief Converts connected client socket to ID.
+     * @param client - TCP socket of a connected client.
+     * @return ID of the connected client, -1 if the client is disconnected.
+     */
+    uint clientSocketToId(const QTcpSocket *client);
+
 private slots:
     /**
      * @brief Handles new client connections.
@@ -91,9 +93,14 @@ private slots:
     void newConnectionHandler();
 
     /**
-     * @brief Handles notifications about incoming data from connected clients.
+     * @brief Handles incoming data from connected clients.
      */
-    void incomingDataHandler();
+    void clientDataHandler();
+
+    /**
+     * @brief Handles diconnecting clients.
+     */
+    void clientDisconnectHandler();
 };
 
 #endif // RACESERVER_H

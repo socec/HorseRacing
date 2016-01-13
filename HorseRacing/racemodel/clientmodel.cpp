@@ -4,9 +4,20 @@ ClientModel::ClientModel(float trackLength, int horseCount, QObject *parent)
     : RaceModel(trackLength, horseCount, parent),
       client("127.0.0.1", 4000)
 {
-    // set network communication
+    // configure multicast, hardcoded for now
+    client.configureMulticast("239.255.13.37", 51337);
+
+    // handle position message datagram
     connect(&client, SIGNAL(datagramReceived(QByteArray)),
             this, SLOT(receivePositionsMessage(QByteArray)));
+    // handle server responses
+    connect(&client, SIGNAL(responseReceived(QByteArray)),
+            this, SLOT(receiveResponse(QByteArray)));
+
+    QByteArray data;
+    data.append("hello ");
+    data.append(QString::number(rand() % 10));
+    client.sendDataToServer(data);
 }
 
 void ClientModel::nextModelStep()
@@ -24,4 +35,9 @@ void ClientModel::receivePositionsMessage(QByteArray message)
 {
     // add message to queue
     messageQueue.enqueue(message);
+}
+
+void ClientModel::receiveResponse(QByteArray message)
+{
+    qDebug() << "Server responded: " << message;
 }

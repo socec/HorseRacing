@@ -41,6 +41,12 @@ private slots:
      * @param message - Message received from server.
      */
     void receivePositionsMessage(QByteArray message);
+
+    /**
+     * @brief Handles server response.
+     * @param message - Message received from server.
+     */
+    void receiveResponse(QByteArray message);
 };
 
 #endif // CLIENTMODEL_H

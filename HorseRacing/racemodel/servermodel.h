@@ -37,6 +37,13 @@ private:
      *        Notifies connected clients about the updates.
      */
     void nextModelStep();
+
+private slots:
+    /**
+     * @brief Handles client request.
+     * @param id - ID of the connected client with request.
+     */
+    void receiveRequest(uint id);
 };
 
 #endif // SERVERMODEL_H

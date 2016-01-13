@@ -28,6 +28,13 @@ public:
      */
     void sendDataToServer(const QByteArray& data);
 
+    /**
+     * @brief Configures multicast connection to receive datagrams from server.
+     * @param multicastAddress - Address used for receiving multicast data.
+     * @param multicastPort - Port used for receiving multicast data.
+     */
+    void configureMulticast(QString multicastAddress, quint16 multicastPort);
+
 signals:
     /**
      * @brief Datagram was received from the server.
@@ -35,16 +42,15 @@ signals:
      */
     void datagramReceived(QByteArray datagram);
 
+    /**
+     * @brief Response was received from the server.
+     * @param data - Server response.
+     */
+    void responseReceived(QByteArray datagram);
+
 private:
     QUdpSocket multicastSocket;
     QTcpSocket tcpSocket;
-
-    /**
-     * @brief Configures multicast connection to receive datagrams from server.
-     * @param multicastAddress - Address used for receiving multicast data.
-     * @param multicastPort - Port used for receiving multicast data.
-     */
-    void configureMulticast(QString multicastAddress, quint16 multicastPort);
 
 private slots:
     /**
@@ -53,9 +59,9 @@ private slots:
     void datagramHandler();
 
     /**
-     * @brief Handles notifications about incoming data from server.
+     * @brief Handles incoming data from server.
      */
-    void incomingDataHandler();
+    void serverDataHandler();
 };
 
 #endif // RACECLIENT_H

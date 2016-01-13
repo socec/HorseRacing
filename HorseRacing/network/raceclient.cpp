@@ -8,7 +8,7 @@ RaceClient::RaceClient(QString hostName, quint16 port, QObject *parent)
       tcpSocket(this)
 {
     // server emits signal when it has data ready to read
-    connect(&tcpSocket, SIGNAL(readyRead()), this, SLOT(incomingDataHandler()));
+    connect(&tcpSocket, SIGNAL(readyRead()), this, SLOT(serverDataHandler()));
 
     // connect to server
     tcpSocket.connectToHost(hostName, port);
@@ -16,9 +16,6 @@ RaceClient::RaceClient(QString hostName, quint16 port, QObject *parent)
     {
         qDebug() << "Could not connect to server: " << tcpSocket.errorString();
     }
-
-    // configure multicast, hardcoded for now
-    configureMulticast("239.255.13.37", 51337);
 }
 
 void RaceClient::sendDataToServer(const QByteArray &data)
@@ -54,8 +51,9 @@ void RaceClient::datagramHandler()
     }
 }
 
-void RaceClient::incomingDataHandler()
+void RaceClient::serverDataHandler()
 {
-    QByteArray msg = tcpSocket.readAll();
-    qDebug() << "Server says: " << QString::fromUtf8(msg);
+    QByteArray data = tcpSocket.readAll();
+    qDebug() << "Server says: " << QString::fromUtf8(data);
+    emit responseReceived(data);
 }
