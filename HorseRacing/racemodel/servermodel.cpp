@@ -5,7 +5,7 @@ ServerModel::ServerModel(float trackLength, int horseCount, QObject *parent)
       server("239.255.13.37", 51337, 4000)
 {
     // listen to client messages
-    connect(&server, SIGNAL(pendingClientData(uint)), this, SLOT(receiveRequest(uint)));
+    connect(&server, SIGNAL(pendingClientData(int)), this, SLOT(receiveRequest(int)));
 }
 
 void ServerModel::nextModelStep()
@@ -25,9 +25,10 @@ void ServerModel::nextModelStep()
     server.sendMulticastData(positionsMessage);
 }
 
-void ServerModel::receiveRequest(uint id)
+void ServerModel::receiveRequest(int id)
 {
     QByteArray request = server.readDataFromClient(id);
-    qDebug() << "Client " << id << " wants: " << request;
     server.sendDataToClient(id, request.append(" to " + QString::number(id)));
+
+    qDebug() << "Client " << id << " wants: " << request;
 }

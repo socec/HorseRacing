@@ -11,7 +11,7 @@ ClientModel::ClientModel(float trackLength, int horseCount, QObject *parent)
     connect(&client, SIGNAL(datagramReceived(QByteArray)),
             this, SLOT(receivePositionsMessage(QByteArray)));
     // handle server responses
-    connect(&client, SIGNAL(responseReceived(QByteArray)),
+    connect(&client, SIGNAL(dataReceived(QByteArray)),
             this, SLOT(receiveResponse(QByteArray)));
 
     QByteArray data;

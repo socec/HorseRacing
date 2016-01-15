@@ -26,20 +26,20 @@ void RaceServer::sendMulticastData(const QByteArray& data)
     multicastSocket.flush();
 }
 
-void RaceServer::sendDataToClient(const uint id, const QByteArray& data)
+void RaceServer::sendDataToClient(const int id, const QByteArray& data)
 {
     clients.at(id)->write(data);
-    clients.at(id)->flush();
+    clients.at(id )->flush();
 }
 
-QByteArray RaceServer::readDataFromClient(const uint id)
+QByteArray RaceServer::readDataFromClient(const int id)
 {
     return clients.at(id)->readAll();
 }
 
-uint RaceServer::clientSocketToId(const QTcpSocket *client)
+int RaceServer::clientSocketToId(const QTcpSocket *client)
 {
-    uint id = -1;
+    int id = -1;
     for (int i = 0; i < clients.size(); i++)
     {
         if (clients.at(i).data() == client)
@@ -56,10 +56,10 @@ void RaceServer::newConnectionHandler()
     // add new client socket to the client list
     QSharedPointer<QTcpSocket> client(tcpServer.nextPendingConnection());
     clients.append(client);
-    // clients emit signal when they have data ready to read
+    // clients emit a signal when they have data ready to read
     connect(client.data(), SIGNAL(readyRead()),
             this, SLOT(clientDataHandler()));
-    // clients emit signal when they disconnect
+    // clients emit a signal when they disconnect
     connect(client.data(), SIGNAL(disconnected()),
             this, SLOT(clientDisconnectHandler()));
 
@@ -69,7 +69,7 @@ void RaceServer::newConnectionHandler()
 void RaceServer::clientDataHandler()
 {
     // emit signal with the client ID
-    uint id = clientSocketToId(qobject_cast<QTcpSocket*>(sender()));
+    int id = clientSocketToId(qobject_cast<QTcpSocket*>(sender()));
     emit pendingClientData(id);
 
     qDebug() << "Client == " << id << " == sent data";
@@ -77,8 +77,10 @@ void RaceServer::clientDataHandler()
 
 void RaceServer::clientDisconnectHandler()
 {
-    uint id = clientSocketToId(qobject_cast<QTcpSocket*>(sender()));
-    clients.remove(id);
-
-    qDebug() << "Client == " << id << " == disconnected";
+    int id = clientSocketToId(qobject_cast<QTcpSocket*>(sender()));
+    if (id > -1)
+    {
+        clients.remove(id);
+        qDebug() << "Client == " << id << " == disconnected";
+    }
 }

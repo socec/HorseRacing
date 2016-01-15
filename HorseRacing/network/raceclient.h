@@ -30,8 +30,8 @@ public:
 
     /**
      * @brief Configures multicast connection to receive datagrams from server.
-     * @param multicastAddress - Address used for receiving multicast data.
-     * @param multicastPort - Port used for receiving multicast data.
+     * @param multicastAddress - Address used to join multicast group.
+     * @param multicastPort - Port used to join multicast group.
      */
     void configureMulticast(QString multicastAddress, quint16 multicastPort);
 
@@ -43,10 +43,10 @@ signals:
     void datagramReceived(QByteArray datagram);
 
     /**
-     * @brief Response was received from the server.
-     * @param data - Server response.
+     * @brief Data was received from the server.
+     * @param data - Byte array of data received from the server.
      */
-    void responseReceived(QByteArray datagram);
+    void dataReceived(QByteArray data);
 
 private:
     QUdpSocket multicastSocket;
@@ -62,6 +62,11 @@ private slots:
      * @brief Handles incoming data from server.
      */
     void serverDataHandler();
+
+    /**
+     * @brief Handles diconnected server.
+     */
+    void serverDisconnectHandler();
 };
 
 #endif // RACECLIENT_H

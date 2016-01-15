@@ -40,7 +40,7 @@ public:
     quint16 getMulticastPort() { return multicastPort; }
 
     /**
-     * @brief Sends data to all clients listening.
+     * @brief Sends data to all clients that joined the multicast group.
      * @param data - Byte array of data to send.
      */
     void sendMulticastData(const QByteArray& data);
@@ -56,21 +56,21 @@ public:
      * @param id - ID of the connected client.
      * @param data - Byte array of data to send.
      */
-    void sendDataToClient(const uint id, const QByteArray& data);
+    void sendDataToClient(const int id, const QByteArray& data);
 
     /**
      * @brief Reads data from a connected client.
      * @param id - ID of the connected client.
      * @return Byte array of data from the client.
      */
-    QByteArray readDataFromClient(const uint id);
+    QByteArray readDataFromClient(const int id);
 
 signals:
     /**
      * @brief There is pending data to read from a connected client.
      * @param id - ID of the connected client with pending data.
      */
-    void pendingClientData(uint id);
+    void pendingClientData(int id);
 
 private:
     QUdpSocket multicastSocket;
@@ -80,11 +80,11 @@ private:
     QVector<QSharedPointer<QTcpSocket>> clients;
 
     /**
-     * @brief Converts connected client socket to ID.
+     * @brief Converts connected client socket to an ID.
      * @param client - TCP socket of a connected client.
-     * @return ID of the connected client, -1 if the client is disconnected.
+     * @return ID of the connected client, -1 if this client is disconnected.
      */
-    uint clientSocketToId(const QTcpSocket *client);
+    int clientSocketToId(const QTcpSocket *client);
 
 private slots:
     /**

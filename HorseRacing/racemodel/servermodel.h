@@ -41,9 +41,9 @@ private:
 private slots:
     /**
      * @brief Handles client request.
-     * @param id - ID of the connected client with request.
+     * @param id - ID of the connected client with the request.
      */
-    void receiveRequest(uint id);
+    void receiveRequest(int id);
 };
 
 #endif // SERVERMODEL_H

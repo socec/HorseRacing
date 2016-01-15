@@ -1,27 +1,45 @@
 #include "racemessage.h"
 
-QByteArray RaceMessage::createPositions(const QVector<float>& horsePositions, const float& cameraPosition)
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+
+QByteArray RaceMessage::createPositions(const QVector<float>& horsePositions,
+                                        const float& cameraPosition)
 {
-    QByteArray message;
+    QJsonObject messageData;
+
     // pack horse data
+    QJsonArray horses;
     for (int i = 0; i < horsePositions.size(); i++)
     {
-        message.append("H" + QString::number((double) horsePositions.at(i), 'f', 2));
+        horses.append(QJsonValue(horsePositions.at(i)));
     }
+    messageData.insert("horses", horses);
+
     // pack camera data
-    message.append("C" + QString::number((double) cameraPosition, 'f', 2));
-    return message;
+    QJsonValue camera(cameraPosition);
+    messageData.insert("camera", camera);
+
+    QJsonDocument messageDoc(messageData);
+
+    return messageDoc.toBinaryData();
 }
 
-void RaceMessage::parsePositions(const QByteArray &message, QVector<float>& horsePositions, float& cameraPosition)
+void RaceMessage::parsePositions(const QByteArray &message,
+                                 QVector<float>& horsePositions,
+                                 float& cameraPosition)
 {
-    // extract camera data
-    QStringList split1 = QString::fromUtf8(message).split("C", QString::SkipEmptyParts);
-    cameraPosition = split1.at(1).toFloat();
+    QJsonDocument messageDoc = QJsonDocument::fromBinaryData(message);
+    QJsonObject messageData = messageDoc.object();
+
     // extract horses data
-    QStringList split2 = split1.at(0).split("H", QString::SkipEmptyParts);
-    for (int i = 0; i < split2.size(); i++)
+    QJsonArray horses = messageData.take("horses").toArray();
+    for (int i = 0; i < horsePositions.size(); i++)
     {
-        horsePositions.replace(i, split2.at(i).toFloat());
+        horsePositions.replace(i, (float) horses.at(i).toDouble());
     }
+    // extract camera data
+    QJsonValue camera = messageData.take("camera");
+    cameraPosition = (float) camera.toDouble();
 }

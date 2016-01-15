@@ -7,8 +7,10 @@ RaceClient::RaceClient(QString hostName, quint16 port, QObject *parent)
       multicastSocket(this),
       tcpSocket(this)
 {
-    // server emits signal when it has data ready to read
+    // server emits a signal when it has data ready to read
     connect(&tcpSocket, SIGNAL(readyRead()), this, SLOT(serverDataHandler()));
+    // server emits a signal when it disconnects
+    connect(&tcpSocket, SIGNAL(disconnected()), this, SLOT(serverDisconnectHandler()));
 
     // connect to server
     tcpSocket.connectToHost(hostName, port);
@@ -54,6 +56,12 @@ void RaceClient::datagramHandler()
 void RaceClient::serverDataHandler()
 {
     QByteArray data = tcpSocket.readAll();
+    emit dataReceived(data);
+
     qDebug() << "Server says: " << QString::fromUtf8(data);
-    emit responseReceived(data);
+}
+
+void RaceClient::serverDisconnectHandler()
+{
+    qDebug() << "Server disconnected";
 }
