@@ -1,11 +1,11 @@
 #ifndef HORSEITEM_H
 #define HORSEITEM_H
 
-#include "raceitem.h"
-#include "spritesheet.h"
+#include <racewidget/raceitem.h>
+#include <racewidget/spritesheet.h>
 
 /**
- * @brief Item representing a race horse.
+ * @brief Item representing a racing horse.
  */
 class HorseItem : public RaceItem
 {
@@ -17,7 +17,7 @@ public:
 
     /**
      * @brief Constructor with initial parameters.
-     * @param worldPosition - Initial item position as a 3D coordinate in world units.
+     * @param worldPosition - Initial item position in world units.
      * @param worldSize - Initial item width and heigth in world units.
      */
     HorseItem(QVector3D worldPosition, QSizeF worldSize);
@@ -30,7 +30,7 @@ public:
     void updateSprite(const SpriteSheet& spriteSheet);
 
     // inherited from RaceItem
-    void setScenePosition(const QPointF& scenePosition);
+    void setScenePosition(const QPointF& newScenePosition);
     void onPaint(QPainter *painter);
 
 private:

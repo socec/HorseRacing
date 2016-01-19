@@ -1,7 +1,7 @@
 #ifndef GATEITEM_H
 #define GATEITEM_H
 
-#include "raceitem.h"
+#include <racewidget/raceitem.h>
 
 /**
  * @brief Item representing the starting gate.
@@ -16,7 +16,7 @@ public:
 
     /**
      * @brief Constructor with initial parameters.
-     * @param worldPosition - Initial item position as a 3D coordinate in world units.
+     * @param worldPosition - Initial item position in world units.
      * @param worldSize - Initial item width and heigth in world units.
      */
     GateItem(QVector3D worldPosition, QSizeF worldSize);

@@ -7,14 +7,17 @@
 #include <QSizeF>
 
 /**
- * @brief Base class for a graphics item used in the race scene.
+ * @brief Base class for a QGraphicsItem used in the QGraphicsScene of the race.
  *
- * Items are meant to be displayed in 2.5D perspective,
- * so they use 3D world position and 2D size.
+ * Items are displayed in 2.5D perspective so they have 3D world position and 2D world size.
  *
- * Item world coordinate defines the top left point of the item.
- * Item size grows from left to right, top to bottom:
+ * The X and Y components of the world position vector define the top left point of the item
+ * when displayed in the scene. The Z component defines the depth of the item when displayed
+ * in the scene.
  *
+ * World size defines the item bounds starting from the world position going from left to right,
+ * top to bottom:
+
  * (0,0)----(w,0)
  *   |        |
  * (0,h)----(w,h)
@@ -29,7 +32,7 @@ public:
 
     /**
      * @brief Constructor with initial parameters.
-     * @param worldPosition - Initial item position as a 3D coordinate in world units.
+     * @param worldPosition - Initial item position in world units.
      * @param worldSize - Initial item width and heigth in world units.
      */
     RaceItem(QVector3D worldPosition, QSizeF worldSize);
@@ -47,24 +50,25 @@ public:
     void setWorldSize(const QSizeF& worldSize) { this->worldSize = worldSize; }
 
     /**
-     * @brief Returns the current world position of the item.
-     * @return 3D coordinate of the item's world position.
+     * @brief Returns the current position of the item.
+     * @return Curent world position vector of the item.
      */
     QVector3D getWorldPosition() const { return worldPosition; }
 
     /**
      * @brief Sets the current world position of the item.
-     * @param worldPosition - 3D coordinate of the item's world position.
+     * @param worldPosition - New world position vector of the item.
      */
     void setWorldPosition(const QVector3D& worldPosition);
 
     /**
-     * @brief Sets the current scene position of the item while handling visual details.
-     *        Called by race animation framework after calculating the item's projected position.
+     * @brief Sets the current position of the item in the scene while taking into account the
+     *        specific visual details of the item.
+     *        Called by the scene after calculating the item's new position in the scene.
      *        Specific implementation needs to be provided by a subclass.
-     * @param scenePosition - New item position in the scene.
+     * @param newScenePosition - New item position in the scene.
      */
-    virtual void setScenePosition(const QPointF& scenePosition) = 0;
+    virtual void setScenePosition(const QPointF& newScenePosition) = 0;
 
     // inherited from QGraphicsItem
     QRectF boundingRect() const;
@@ -75,10 +79,10 @@ protected:
     QSizeF worldSize;
 
     /**
-     * @brief Handles details of painting this item.
+     * @brief Handles the specific details of painting this item.
      *        Called by QGraphicsItem::paint().
      *        Specific implementation needs to be provided by a subclass.
-     * @param painter - Painter object performing the actual painting.
+     * @param painter - Painter object that performs the actual painting.
      */
     virtual void onPaint(QPainter *painter) = 0;
 };

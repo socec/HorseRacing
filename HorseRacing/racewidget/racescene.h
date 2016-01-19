@@ -1,15 +1,15 @@
 #ifndef RACESCENE_H
 #define RACESCENE_H
 
+#include <racewidget/raceitems/fenceitem.h>
+#include <racewidget/raceitems/gateitem.h>
+#include <racewidget/raceitems/horseitem.h>
+#include <racewidget/spritesheet.h>
+
 #include <QGraphicsScene>
 #include <QWidget>
 #include <QGraphicsLineItem>
 #include <QSharedPointer>
-
-#include "fenceitem.h"
-#include "gateitem.h"
-#include "spritesheet.h"
-#include "horseitem.h"
 
 #define POSTS_PER_MARK (5)
 #define CAMERA_SHIFT_X (0.0)
@@ -17,11 +17,11 @@
 #define DEPTH_SCALE_FACTOR (0.2)
 
 /**
- * @brief Race scene animation framework.
+ * @brief Race implementaion of QGraphicsScene.
  *
- * Distributes items on the scene, handles updates to item positions and
- * projects them correctly to the screen in a 2.5D perspective.
- * Uses a parent QGraphiscView to display the scene and determine it's size.
+ * Distributes items on the scene, handles updates to item positions and projects them
+ * correctly to the screen in a 2.5D perspective (animation framework).
+ * Needs a parent QGraphiscView to display the scene and determine it's size.
  */
 class RaceScene : public QGraphicsScene
 {
@@ -36,7 +36,7 @@ public:
     RaceScene(QWidget *parent);
 
     /**
-     * @brief Builds the race scene by distributing items.
+     * @brief Builds the scene by distributing items.
      * @param viewSize - Size of the QGraphicsView diplaying the race.
      * @param trackLength - Length of the race track.
      * @param horseCount - Number of horses in the race.
@@ -63,7 +63,7 @@ private:
     {
         // length of the track
         float trackLength;
-        // adjustment factor for positions to match the animated track length
+        // position adjustment factor to match the animated track length
         float positionAdjust;
         // starting line
         float startPosition;

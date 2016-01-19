@@ -1,12 +1,12 @@
 #ifndef RACEWIDGET_H
 #define RACEWIDGET_H
 
+#include <racewidget/racescene.h>
+
 #include <QWidget>
 #include <QGraphicsView>
 #include <QSlider>
 #include <QLabel>
-
-#include "racescene.h"
 
 // widget size is 16:9, qHD
 #define RACEWIDGET_WIDTH (960)
@@ -16,7 +16,7 @@
 #define SLIDER_HEIGHT (100)
 
 /**
- * @brief Widget used to display the race.
+ * @brief Widget displaying the race.
  *
  * Public functions and slots provide an interface to visualize a race
  * that is generated using a separated race model.

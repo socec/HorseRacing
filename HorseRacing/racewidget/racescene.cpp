@@ -9,7 +9,7 @@ RaceScene::RaceScene(QWidget *parent)
 
 void RaceScene::build(QSizeF viewSize, float trackLength, int horseCount)
 {
-    // trim view size from parent to avoid scroll bars
+    // trim view size to avoid scroll bars in the parent
     viewSize.setWidth(viewSize.width() - 2);
     viewSize.setHeight(viewSize.height() - 2);
 
@@ -19,7 +19,7 @@ void RaceScene::build(QSizeF viewSize, float trackLength, int horseCount)
     setSceneRect(0, 0, viewSize.width(), viewSize.height());
     setBackgroundBrush(Qt::gray);
 
-    // do not use item indexing since items are moving
+    // do not use item indexing because items are moving
     setItemIndexMethod(ItemIndexMethod::NoIndex);
 
     // set camera

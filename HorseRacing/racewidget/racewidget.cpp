@@ -21,6 +21,7 @@ RaceWidget::RaceWidget(float trackLength, int horseCount, QWidget *parent)
 void RaceWidget::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
+
     // resizing is ignored, but UI needs to be adjusted
     uiAdjust();
 }

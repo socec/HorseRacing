@@ -1,10 +1,7 @@
 #ifndef FENCEITEM_H
 #define FENCEITEM_H
 
-#include <QVector>
-#include <QLineF>
-
-#include "raceitem.h"
+#include <racewidget/raceitem.h>
 
 /**
  * @brief Item representing a fence on the race track.
@@ -19,7 +16,7 @@ public:
 
     /**
      * @brief Constructor with initial parameters.
-     * @param worldPosition - Initial item position as a 3D coordinate in world units.
+     * @param worldPosition - Initial item position in world units.
      * @param worldSize - Initial item width and heigth in world units.
      * @param postSpacing - Spacing between the fence posts in world units.
      */
@@ -42,12 +39,12 @@ public:
     void onPaint(QPainter *painter);
 
 private:
-    float postSpacing;
+    int postSpacing;
     QVector<QLineF> postLines;
     QLineF barLine;
 
     /**
-     * @brief Constructs the item details based on current parameters.
+     * @brief Constructs the item's visual details based on current parameters.
      */
     void construct();
 };

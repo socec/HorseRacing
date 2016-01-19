@@ -5,8 +5,6 @@ GateItem::GateItem()
 {
     topHeight = 0;
     bottomHeight = 0;
-    topRect = QRectF();
-    bottomRect = QRectF();
 }
 
 GateItem::GateItem(QVector3D worldPos, QSizeF worldSize)
@@ -20,12 +18,12 @@ GateItem::GateItem(QVector3D worldPos, QSizeF worldSize)
 
 void GateItem::setScenePosition(const QPointF& scenePosition)
 {
-    // place bottom right point at requested scene postion
-    // to match the way a horse is positioned
-    QPointF offset(boundingRect().width(), boundingRect().height());
+    // place bottom right point at the requested scene postion
+    // to match the way a horse item is positioned
 
+    QPointF bottomRightOffset(boundingRect().width(), boundingRect().height());
     // setting position in parent coordinates, need to use item scale on offset
-    setPos(scenePosition - offset * scale());
+    setPos(scenePosition - bottomRightOffset * scale());
 }
 
 void GateItem::onPaint(QPainter *painter)

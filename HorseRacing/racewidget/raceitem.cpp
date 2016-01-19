@@ -1,18 +1,18 @@
 #include "raceitem.h"
 
 RaceItem::RaceItem()
+    : worldPosition(0, 0, 0),
+      worldSize(0, 0)
 {
-    worldPosition = QVector3D(0, 0, 0);
-    worldSize = QSizeF(0, 0);
     // scene positioning
     setPos(0, 0);
     setZValue(0);
 }
 
 RaceItem::RaceItem(QVector3D worldPosition, QSizeF worldSize)
+    : worldPosition(worldPosition),
+      worldSize(worldSize)
 {
-    this->worldPosition = worldPosition;
-    this->worldSize = worldSize;
     // scene positioning
     setPos(worldPosition.x(), worldPosition.y());
     setZValue(worldPosition.z());
@@ -40,7 +40,7 @@ void RaceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    // paint item contents
+    // delegate painting the item
     onPaint(painter);
 
     // redraw item

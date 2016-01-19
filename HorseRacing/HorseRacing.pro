@@ -16,9 +16,6 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    racewidget/fenceitem.cpp \
-    racewidget/gateitem.cpp \
-    racewidget/horseitem.cpp \
     racewidget/raceitem.cpp \
     racewidget/racescene.cpp \
     racewidget/spritesheet.cpp \
@@ -29,12 +26,12 @@ SOURCES += main.cpp\
     network/racemessage.cpp \
     racemodel/racemodel.cpp \
     racemodel/servermodel.cpp \
-    racemodel/clientmodel.cpp
+    racemodel/clientmodel.cpp \
+    racewidget/raceitems/fenceitem.cpp \
+    racewidget/raceitems/gateitem.cpp \
+    racewidget/raceitems/horseitem.cpp
 
 HEADERS  += \
-    racewidget/fenceitem.h \
-    racewidget/gateitem.h \
-    racewidget/horseitem.h \
     racewidget/raceitem.h \
     racewidget/racescene.h \
     racewidget/racewidget.h \
@@ -45,7 +42,10 @@ HEADERS  += \
     network/racemessage.h \
     racemodel/racemodel.h \
     racemodel/servermodel.h \
-    racemodel/clientmodel.h
+    racemodel/clientmodel.h \
+    racewidget/raceitems/fenceitem.h \
+    racewidget/raceitems/gateitem.h \
+    racewidget/raceitems/horseitem.h
 
 RESOURCES += \
     images.qrc

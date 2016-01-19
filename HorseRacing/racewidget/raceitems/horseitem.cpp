@@ -18,7 +18,7 @@ HorseItem::HorseItem(QVector3D worldPos, QSizeF worldSize)
 
 void HorseItem::updateSprite(const SpriteSheet& spriteSheet)
 {
-    // when starting the race set random sprite index for variety in horse gait
+    // set random sprite index when starting the race for variety in horse gait
     if (onStartingLine)
     {
         spriteIndex = qrand() % spriteSheet.getSpriteCount();
@@ -34,14 +34,14 @@ void HorseItem::updateSprite(const SpriteSheet& spriteSheet)
     sprite = spriteSheet.getSpriteAt(spriteIndex);
 }
 
-void HorseItem::setScenePosition(const QPointF& scenePosition)
+void HorseItem::setScenePosition(const QPointF& newScenePosition)
 {
-    // place bottom right point at requested scene postion
-    // to match horse head with requested position
-    QPointF offset(boundingRect().width(), boundingRect().height());
+    // place bottom right point at the requested scene postion so that the head of the horse
+    // matches the requested position
 
-    // setting position in parent coordinates, need to use item scale on offset
-    setPos(scenePosition - offset * scale());
+    QPointF bottomRightOffset(boundingRect().width(), boundingRect().height());
+    // setting position in parent coordinates, need to use item scale on the offset
+    setPos(newScenePosition - bottomRightOffset * scale());
 }
 
 void HorseItem::onPaint(QPainter *painter)
