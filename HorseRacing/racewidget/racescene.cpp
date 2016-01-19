@@ -1,7 +1,8 @@
 #include "racescene.h"
 
 RaceScene::RaceScene(QWidget *parent)
-    : QGraphicsScene(parent)
+    : QGraphicsScene(parent),
+      spritesheet("muybridge_spritesheet.png", 4, 4)
 {
     // adding items to the scene is delegated to the build() method
 }

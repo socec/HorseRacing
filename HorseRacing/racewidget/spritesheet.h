@@ -1,19 +1,23 @@
 #ifndef SPRITESHEET_H
 #define SPRITESHEET_H
 
+#include <QString>
 #include <QPixmap>
 #include <QVector>
 
 /**
- * @brief Sprite sheet used in horse animation.
+ * @brief Handles the sprite sheet used in race animation.
  */
 class SpriteSheet
 {
 public:
     /**
      * @brief Class constructor.
+     * @param filename - Name of the spritesheet file from the directory of images.
+     * @param rows - Number of rows in the spritesheet.
+     * @param columns - Number of columns in the spritesheet.
      */
-    SpriteSheet();
+    SpriteSheet(QString filename, int rows, int columns);
 
     /**
      * @brief Returns the sprite at the given index in the spritesheet.

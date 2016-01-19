@@ -1,21 +1,18 @@
 #include "spritesheet.h"
 
-SpriteSheet::SpriteSheet()
+SpriteSheet::SpriteSheet(QString filename, int rows, int columns)
 {
     // load sprite sheet
-    QPixmap sheet(":/images/muybridge_spritesheet.png", "PNG");
+    QPixmap sheet(":/images/" + filename);
 
-    // sprite sheet used here has 4x4 sprites
-    int spriteRows = 4;
-    int spriteColumns = 4;
+    // get sprite dimensions
+    spriteWidth = sheet.width() / columns;
+    spriteHeight = sheet.height() / rows;
 
-    spriteWidth = sheet.width() / spriteColumns;
-    spriteHeight = sheet.height() / spriteRows;
-
-    // extract sprites in correct order, to right then down
-    for (int i = 0; i < spriteRows; i++)
+    // extract sprites, assuming correct order is to right then down
+    for (int i = 0; i < rows; i++)
     {
-        for (int j = 0; j < spriteColumns; j++)
+        for (int j = 0; j < columns; j++)
         {
             QPixmap sprite = sheet.copy(j*spriteWidth, i*spriteHeight, spriteWidth, spriteHeight);
             sprites.append(sprite);
