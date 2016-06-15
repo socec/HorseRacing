@@ -1,4 +1,4 @@
-#include "horseitem.h"
+#include <horseitem.h>
 
 HorseItem::HorseItem()
     : RaceItem()

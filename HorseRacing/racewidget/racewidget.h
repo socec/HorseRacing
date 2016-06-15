@@ -1,7 +1,7 @@
 #ifndef RACEWIDGET_H
 #define RACEWIDGET_H
 
-#include <racewidget/racescene.h>
+#include <racescene.h>
 
 #include <QWidget>
 #include <QGraphicsView>

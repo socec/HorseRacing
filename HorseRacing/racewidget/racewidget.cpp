@@ -1,4 +1,4 @@
-#include "racewidget.h"
+#include <racewidget.h>
 
 RaceWidget::RaceWidget(float trackLength, int horseCount, QWidget *parent)
     : QWidget(parent),

@@ -6,9 +6,9 @@
 #include <QPushButton>
 #include <QSharedPointer>
 
-#include "racewidget/racewidget.h"
-#include "racemodel/servermodel.h"
-#include "racemodel/clientmodel.h"
+#include <racewidget.h>
+#include <servermodel.h>
+#include <clientmodel.h>
 
 // race parameters
 #define TRACK_LENGTH (1000.0)

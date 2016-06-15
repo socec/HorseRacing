@@ -1,4 +1,4 @@
-#include "servermodel.h"
+#include <servermodel.h>
 
 ServerModel::ServerModel(float trackLength, int horseCount, QObject *parent)
     : RaceModel(trackLength, horseCount, parent),

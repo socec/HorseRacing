@@ -1,4 +1,4 @@
-#include "racescene.h"
+#include <racescene.h>
 
 RaceScene::RaceScene(QWidget *parent)
     : QGraphicsScene(parent),

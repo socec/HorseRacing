@@ -1,7 +1,7 @@
 #ifndef GATEITEM_H
 #define GATEITEM_H
 
-#include <racewidget/raceitem.h>
+#include <raceitem.h>
 
 /**
  * @brief Item representing the starting gate.

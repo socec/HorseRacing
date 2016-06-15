@@ -1,8 +1,7 @@
 #include <QApplication>
 #include <QMainWindow>
 
-#include "racecontrol/racecontrol.h"
-#include "network/raceserver.h"
+#include <racecontrol.h>
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);

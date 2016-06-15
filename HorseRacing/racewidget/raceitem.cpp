@@ -1,4 +1,4 @@
-#include "raceitem.h"
+#include <raceitem.h>
 
 RaceItem::RaceItem()
     : worldPosition(0, 0, 0),

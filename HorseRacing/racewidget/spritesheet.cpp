@@ -1,7 +1,10 @@
-#include "spritesheet.h"
+#include <spritesheet.h>
 
 SpriteSheet::SpriteSheet(QString filename, int rows, int columns)
 {
+    // initializing resources in a library
+    Q_INIT_RESOURCE(images);
+
     // load sprite sheet
     QPixmap sheet(":/images/" + filename);
 

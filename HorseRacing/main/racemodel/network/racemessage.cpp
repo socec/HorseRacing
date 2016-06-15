@@ -1,4 +1,4 @@
-#include "racemessage.h"
+#include <racemessage.h>
 
 #include <QJsonDocument>
 #include <QJsonObject>

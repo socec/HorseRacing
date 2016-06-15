@@ -1,4 +1,4 @@
-#include "fenceitem.h"
+#include <fenceitem.h>
 
 FenceItem::FenceItem()
     : RaceItem(),

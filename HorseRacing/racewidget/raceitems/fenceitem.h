@@ -1,7 +1,7 @@
 #ifndef FENCEITEM_H
 #define FENCEITEM_H
 
-#include <racewidget/raceitem.h>
+#include <raceitem.h>
 
 /**
  * @brief Item representing a fence on the race track.

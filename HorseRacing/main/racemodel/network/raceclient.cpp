@@ -1,4 +1,4 @@
-#include "raceclient.h"
+#include <raceclient.h>
 
 #include <QDebug>
 

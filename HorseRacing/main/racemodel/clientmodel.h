@@ -3,9 +3,9 @@
 
 #include <QQueue>
 
-#include "racemodel.h"
-#include "network/raceclient.h"
-#include "network/racemessage.h"
+#include <racemodel.h>
+#include <network/raceclient.h>
+#include <network/racemessage.h>
 
 /**
  * @brief Client side race model.

@@ -1,4 +1,4 @@
-#include "gateitem.h"
+#include <gateitem.h>
 
 GateItem::GateItem()
     : RaceItem()

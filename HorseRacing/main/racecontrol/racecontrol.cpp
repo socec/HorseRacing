@@ -1,4 +1,4 @@
-#include "racecontrol.h"
+#include <racecontrol.h>
 
 RaceControl::RaceControl(QWidget *parent)
     : QWidget(parent),

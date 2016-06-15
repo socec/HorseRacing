@@ -1,4 +1,4 @@
-#include "clientmodel.h"
+#include <clientmodel.h>
 
 ClientModel::ClientModel(float trackLength, int horseCount, QObject *parent)
     : RaceModel(trackLength, horseCount, parent),

@@ -1,9 +1,9 @@
 #ifndef SERVERMODEL_H
 #define SERVERMODEL_H
 
-#include "racemodel.h"
-#include "network/raceserver.h"
-#include "network/racemessage.h"
+#include <racemodel.h>
+#include <network/raceserver.h>
+#include <network/racemessage.h>
 
 #define BASE_SPEED (5.0)
 

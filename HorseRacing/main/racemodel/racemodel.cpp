@@ -1,4 +1,4 @@
-#include "racemodel.h"
+#include <racemodel.h>
 
 RaceModel::RaceModel(float trackLength, int horseCount, QObject *parent)
     : trackLength(trackLength)

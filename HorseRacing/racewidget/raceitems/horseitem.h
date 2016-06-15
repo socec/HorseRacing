@@ -1,8 +1,8 @@
 #ifndef HORSEITEM_H
 #define HORSEITEM_H
 
-#include <racewidget/raceitem.h>
-#include <racewidget/spritesheet.h>
+#include <raceitem.h>
+#include <spritesheet.h>
 
 /**
  * @brief Item representing a racing horse.

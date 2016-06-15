@@ -1,10 +1,10 @@
 #ifndef RACESCENE_H
 #define RACESCENE_H
 
-#include <racewidget/raceitems/fenceitem.h>
-#include <racewidget/raceitems/gateitem.h>
-#include <racewidget/raceitems/horseitem.h>
-#include <racewidget/spritesheet.h>
+#include <raceitems/fenceitem.h>
+#include <raceitems/gateitem.h>
+#include <raceitems/horseitem.h>
+#include <spritesheet.h>
 
 #include <QGraphicsScene>
 #include <QWidget>
