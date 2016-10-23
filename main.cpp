@@ -6,8 +6,6 @@ int main(int argc, char *argv[]) {
 
     QMainWindow window;
 
-    // set widget here
-
     window.show();
 
     return a.exec();
